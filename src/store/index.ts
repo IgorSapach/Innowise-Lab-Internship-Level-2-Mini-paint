@@ -26,6 +26,10 @@ export default createStore({
         .then((resp: any) => {
           commit("setUserIsAuth", true);
           commit("setUserId", resp.user.uid);
+          localStorage.setItem(
+            "userId",
+            JSON.stringify({ userId: resp.user.uid })
+          );
         })
         .catch((err) => alert(err.message));
     },
@@ -34,9 +38,12 @@ export default createStore({
         .auth()
         .signInWithEmailAndPassword(vm.email, vm.password)
         .then((resp: any) => {
-          console.log(resp);
           commit("setUserIsAuth", true);
           commit("setUserId", resp.user.uid);
+          localStorage.setItem(
+            "userId",
+            JSON.stringify({ userId: resp.user.uid })
+          );
         })
         .catch((err) => alert(err.message));
     },
