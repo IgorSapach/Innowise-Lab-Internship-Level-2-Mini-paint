@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 import firebase from "firebase";
-import router from "@/router";
+// import router from "@/router";
 import drawingOptions from "./drawing-options";
 
 export default createStore({
@@ -8,11 +8,14 @@ export default createStore({
     isAuth: false,
     userId: "",
     key: "",
-    savedUsersImages: {},
+    savedUsersImages: 123123123,
+    haveImages: false,
   },
   getters: {
     isAuth: (state) => state.isAuth,
     userId: (state) => state.userId,
+    savedUsersImages: (state) => state.savedUsersImages,
+    haveImages: (state) => state.haveImages,
   },
   mutations: {
     setUserIsAuth(state, payload) {
@@ -26,6 +29,9 @@ export default createStore({
     },
     setUsersImages(state, payload) {
       state.savedUsersImages = payload;
+    },
+    setHaveImages(state, payload) {
+      state.haveImages = payload;
     },
   },
   actions: {
@@ -46,7 +52,11 @@ export default createStore({
         .on("value", function (dataSnapshot) {
           const data = dataSnapshot.val();
           console.log(data);
+          for (const key in data) {
+            console.log(data[key]);
+          }
           commit("setUsersImages", data);
+          commit("setHaveImages", true);
         });
     },
     signUp({ commit }, vm) {
