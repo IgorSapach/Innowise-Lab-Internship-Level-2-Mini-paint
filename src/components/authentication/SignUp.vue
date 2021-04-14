@@ -35,7 +35,7 @@ export default defineComponent({
 
     const store = useStore();
     const signUp = function () {
-      store.dispatch("logIn", signUpUserCredentionals).finally(() => {
+      store.dispatch("signUp", signUpUserCredentionals).finally(() => {
         router.push({ name: "paint", params: { uid: store.getters.userId } });
       });
     };
