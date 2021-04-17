@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted } from "vue";
+import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({
@@ -24,10 +24,6 @@ export default defineComponent({
       }
       return false;
     });
-    onMounted(() => {
-      store.dispatch("init");
-    });
-
     return { images, haveImages };
   },
 });
