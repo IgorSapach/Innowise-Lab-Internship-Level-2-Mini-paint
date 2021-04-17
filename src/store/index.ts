@@ -11,8 +11,9 @@ export default createStore({
     savedUserImages: {},
   },
   getters: {
-    isAuth: (state) => state.isAuth,
-    userId: (state) => state.userId,
+    isAuth: (state: { isAuth: boolean }) => state.isAuth,
+    userId: (state: { userId: string }) => state.userId,
+    savedUsersImages: (state) => state.savedUserImages,
   },
   mutations: {
     setUserIsAuth(state, payload) {
@@ -25,7 +26,6 @@ export default createStore({
       state.key = payload;
     },
     setUserImages(state, payload) {
-      // console.log(payload);
       state.savedUserImages = payload;
     },
   },
@@ -54,7 +54,7 @@ export default createStore({
         })
         .catch((err) => alert(err.message));
     },
-    logIn({ commit }, vm) {
+    logIn({ dispatch, commit }, vm) {
       return firebaseApp
         .auth()
         .signInWithEmailAndPassword(vm.email, vm.password)
@@ -68,19 +68,10 @@ export default createStore({
         })
         .catch((err) => alert(err.message));
     },
-
     onSaveImage({ commit, state }, vm) {
-      // if (state.key == "") {
-      // console.log(firebaseApp.database().ref("user"));
-      // commit("setKey", firebaseApp.database().ref().push().key);
-      // const image = vm.toDataURL();
-
-      // console.log(state.key);
       firebaseApp.database().ref(`${state.userId}/`).push(vm.toDataURL());
-      // firebaseApp.database().ref().push();
-      // .then((resp) => console.log(resp));
-      // }
     },
+
     getUserImages({ state, commit }) {
       return firebaseApp
         .database()
