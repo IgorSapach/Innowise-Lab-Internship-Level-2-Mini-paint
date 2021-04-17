@@ -2,7 +2,7 @@
   <div class="taskBar">
     <div class="taskBar__item">
       <button class="taskBar__item_button button" @click="goTo">
-        Open {{ currentRoute }}
+        Open {{ currentRoute === "home" ? "paint" : "home" }}
       </button>
     </div>
     <div class="taskBar__item">

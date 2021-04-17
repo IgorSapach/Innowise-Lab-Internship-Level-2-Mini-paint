@@ -1,21 +1,29 @@
 <template>
   <div class="body__item">
-    <task-bar />
+    <task-bar v-if="isAuth" />
     <router-view />
   </div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { computed, defineComponent, onMounted } from "vue";
 import taskBar from "../src/components/task-bar/TaskBar.vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "App",
   components: {
     taskBar,
   },
-  mounted() {
-    this.$store.dispatch("init");
+  setup() {
+    const store = useStore();
+    const isAuth = computed(() => {
+      return store.getters.isAuth;
+    });
+    onMounted(() => {
+      store.dispatch("init");
+    });
+    return { isAuth };
   },
 });
 </script>
