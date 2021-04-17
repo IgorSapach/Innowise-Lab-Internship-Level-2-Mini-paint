@@ -51,7 +51,7 @@ import { defineComponent, reactive } from "vue";
 import { useStore } from "vuex";
 import * as ToolNames from "@/const/draw-tool-names";
 import { EventBus } from "@/EventBus";
-//InstrumentsPanel.vue
+
 export default defineComponent({
   data() {
     return {

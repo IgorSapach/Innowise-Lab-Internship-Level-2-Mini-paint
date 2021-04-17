@@ -17,7 +17,7 @@ import { defineComponent } from "vue";
 import { useStore } from "vuex";
 import * as ToolNames from "@/const/draw-tool-names";
 import { EventBus } from "@/EventBus";
-//DrawArea.vue
+
 export default defineComponent({
   data() {
     return {
@@ -47,7 +47,6 @@ export default defineComponent({
   },
   methods: {
     startPainting(cursorPosition) {
-      console.log(this.canvas.height, this.canvas.width);
       this.painting = true;
       this.sursorStartPos = getDrawingCoordinates(cursorPosition, this.bounds);
       this.tempImage = this.ctx.getImageData(
@@ -63,7 +62,6 @@ export default defineComponent({
       this.ctx.beginPath();
     },
     draw(cursorPosition) {
-      //arc круг
       if (!this.painting) return;
       this.ctx.lineCap = "round";
       this.ctx.fillStyle = this.drawingProperties.lineColor;

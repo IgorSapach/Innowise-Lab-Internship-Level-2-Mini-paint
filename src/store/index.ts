@@ -59,7 +59,6 @@ export default createStore({
         .auth()
         .signInWithEmailAndPassword(vm.email, vm.password)
         .then((resp: any) => {
-          console.log(resp);
           commit("setUserIsAuth", true);
           commit("setUserId", resp.user.uid);
           localStorage.setItem(
@@ -70,16 +69,7 @@ export default createStore({
         .catch((err) => alert(err.message));
     },
     onSaveImage({ commit, state }, vm) {
-      // if (state.key == "") {
-      // console.log(firebaseApp.database().ref("user"));
-      // commit("setKey", firebaseApp.database().ref().push().key);
-      // const image = vm.toDataURL();
-
-      // console.log(state.key);
       firebaseApp.database().ref(`${state.userId}/`).push(vm.toDataURL());
-      // firebaseApp.database().ref().push();
-      // .then((resp) => console.log(resp));
-      // }
     },
 
     getUserImages({ state, commit }) {
