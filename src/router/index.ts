@@ -24,14 +24,14 @@ const router = createRouter({
   routes,
 });
 
-// router.beforeEach((from, to, next) => {
-//   if (
-//     to.name !== "authentication" &&
-//     !store.getters.isAuth &&
-//     from.name !== "authentication"
-//   ) {
-//     next({ name: "authentication" });
-//   } else next();
-// });
+router.beforeEach((from, to, next) => {
+  if (
+    to.name !== "authentication" &&
+    !store.getters.isAuth &&
+    from.name !== "authentication"
+  ) {
+    next({ name: "authentication" });
+  } else next();
+});
 
 export default router;

@@ -21,25 +21,8 @@ body{
   padding: 0.7rem 1rem;
   &:hover{
    background-color: $deepLightBlue;
-}
-
-}
-.gallery {
-
-  display: flex;
-  overflow: auto;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-    &__item {
-      width: 500px;
-      }
-    &__item_image{
-      width: 100%;
-      background-color: #ffffff
-    }
   }
+}
 .auth {
   background: $white; 
   height: 100vh;
@@ -101,6 +84,39 @@ body{
     padding-right: 2rem;
   }
 }
-
+.taskBar {
+  height: 8vh;
+  display: flex;
+  justify-content:flex-end;
+  align-items: center;
+  padding-right: 2rem;
+  &__item {
+    margin: 0.5rem
+  }
+  &__item_button {}
+}
+.gallery {
+height: 92vh;
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+    &__item {
+      margin: 1rem;
+      display: inline-block;
+      width: 500px;
+      border:1px solid $gray;
+      box-shadow: 0 30px 60px 0 rgb(0 0 0 / 30%);
+      }
+    &__item_image{
+      width: 100%;
+      background-color: #ffffff;
+      max-height: 100%;
+      min-width: 100%;
+      object-fit: cover;
+      vertical-align: bottom;
+    }
+  }
 
 @import "./reset.scss";
