@@ -13,10 +13,3 @@ export default defineComponent({
   components: { DrawArea, instruments },
 });
 </script>
-
-<style scoped>
-.drawing {
-  border: 1px solid red;
-  cursor: crosshair;
-}
-</style>

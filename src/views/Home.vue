@@ -1,26 +1,43 @@
 <template>
-  <div v-if="haveImages">
-    <div v-for="item in images" :key="item">
-      <img :src="item" />
+  <div>
+    <div><button @click="openDrawingPad">open drawing pad</button></div>
+    <div v-if="haveImages" class="gallery">
+      <div v-for="item in images" :key="item" class="gallery__item">
+        <img :src="item" class="gallery__item_image" />
+      </div>
     </div>
   </div>
 </template>
+
 <script>
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, onMounted } from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({
   setup() {
     const store = useStore();
     const images = computed(() => {
-      console.log(store.getters.savedUsersImages);
       return store.getters.savedUsersImages;
     });
     const haveImages = computed(() => {
-      return store.getters.haveImages;
+      for (let key in store.getters.savedUsersImages) {
+        return true;
+      }
+      return false;
+    });
+    const openDrawingPad = function () {
+      if (store.getters.userId) {
+        this.$router.push({
+          name: "paint",
+          params: { uid: store.getters.userId },
+        });
+      }
+    };
+    onMounted(() => {
+      store.dispatch("init");
     });
 
-    return { images, haveImages };
+    return { images, haveImages, openDrawingPad };
   },
 });
 </script>

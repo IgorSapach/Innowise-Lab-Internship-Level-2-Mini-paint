@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 import firebase from "firebase";
-// import router from "@/router";
+import router from "@/router";
 import drawingOptions from "./drawing-options";
 
 export default createStore({
@@ -8,13 +8,11 @@ export default createStore({
     isAuth: false,
     userId: "",
     key: "",
-    haveImages: false,
     savedUserImages: {},
   },
   getters: {
     isAuth: (state: { isAuth: boolean }) => state.isAuth,
     userId: (state: { userId: string }) => state.userId,
-    haveImages: (state: { haveImages: boolean }) => state.haveImages,
     savedUsersImages: (state) => state.savedUserImages,
   },
   mutations: {
@@ -28,33 +26,19 @@ export default createStore({
       state.key = payload;
     },
     setUserImages(state, payload) {
-      console.log(payload);
       state.savedUserImages = payload;
-    },
-    setHaveImages(state, payload) {
-      state.haveImages = payload;
     },
   },
   actions: {
-    init({ commit, state }) {
-      const userId = JSON.parse(localStorage.getItem("userId") || "{}");
-      commit("setUserId", userId.userId);
-      // commit("setUserIsAuth", true);
-      //   router.push({
-      //     name: "paint",
-      //     params: { uid: state.userId },
-      //   });
-      // }
-
-      firebaseApp
-        .database()
-        .ref(`${state.userId}/`)
-        .on("value", function (dataSnapshot) {
-          const data = dataSnapshot.val();
-
-          commit("setUserImages", data);
-          commit("setHaveImages", true);
-        });
+    init({ commit, dispatch }) {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          commit("setUserId", user.uid);
+          dispatch("getUserImages").then(() => {
+            router.push({ name: "home" });
+          });
+        }
+      });
     },
     signUp({ commit }, vm) {
       return firebaseApp
@@ -96,6 +80,15 @@ export default createStore({
       // firebaseApp.database().ref().push();
       // .then((resp) => console.log(resp));
       // }
+    },
+
+    getUserImages({ state, commit }) {
+      return firebaseApp
+        .database()
+        .ref(`${state.userId}/`)
+        .on("value", function (dataSnapshot) {
+          commit("setUserImages", dataSnapshot.val());
+        });
     },
   },
   modules: {
