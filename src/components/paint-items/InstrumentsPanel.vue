@@ -20,7 +20,7 @@
           activeTool: drawingProperties.activeTool === ToolNames.PENCIL,
         }"
       >
-        pencil
+        <font-awesome-icon :icon="['fas', 'pencil-alt']" size="2x" />
       </div>
       <div
         @click="setActiveTool(ToolNames.RECT)"
@@ -29,7 +29,18 @@
           activeTool: drawingProperties.activeTool === ToolNames.RECT,
         }"
       >
-        rect
+        <font-awesome-icon :icon="['fas', 'square']" size="2x" />
+        <font-awesome-icon :icon="['far', 'square']" size="2x" />
+      </div>
+      <div
+        @click="setActiveTool(ToolNames.CIRCLE)"
+        class="tool-selection__item"
+        :class="{
+          activeTool: drawingProperties.activeTool === ToolNames.CIRCLE,
+        }"
+      >
+        <font-awesome-icon :icon="['fas', 'circle']" size="2x" />
+        <font-awesome-icon :icon="['far', 'circle']" size="2x" />
       </div>
       <div><button @click="onSave">save</button></div>
     </div>
@@ -40,7 +51,7 @@ import { defineComponent, reactive } from "vue";
 import { useStore } from "vuex";
 import * as ToolNames from "@/const/draw-tool-names";
 import { EventBus } from "@/EventBus";
-
+//InstrumentsPanel.vue
 export default defineComponent({
   data() {
     return {
@@ -58,7 +69,7 @@ export default defineComponent({
   },
   methods: {
     onSave() {
-      EventBus.emit("some-event");
+      EventBus.emit("save-image");
     },
   },
 });

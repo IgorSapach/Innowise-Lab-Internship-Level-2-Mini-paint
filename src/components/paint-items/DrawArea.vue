@@ -2,8 +2,6 @@
   <canvas
     ref="canvas"
     id="drawing-pad"
-    width="300"
-    height="300"
     class="drawing"
     @mousedown="startPainting({ x: $event.clientX, y: $event.clientY })"
     @mousemove="draw({ x: $event.clientX, y: $event.clientY })"
@@ -13,12 +11,13 @@
     This is an interactive drawind pad.
   </canvas>
 </template>
+
 <script>
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
 import * as ToolNames from "@/const/draw-tool-names";
 import { EventBus } from "@/EventBus";
-
+//DrawArea.vue
 export default defineComponent({
   data() {
     return {
@@ -29,6 +28,7 @@ export default defineComponent({
         x: null,
         y: null,
       },
+      tempImage: [],
     };
   },
   setup() {
@@ -47,9 +47,15 @@ export default defineComponent({
   },
   methods: {
     startPainting(cursorPosition) {
+      console.log(this.canvas.height, this.canvas.width);
       this.painting = true;
       this.sursorStartPos = getDrawingCoordinates(cursorPosition, this.bounds);
-      console.log(cursorPosition);
+      this.tempImage = this.ctx.getImageData(
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
       this.draw(cursorPosition);
     },
     finishedPainting() {
@@ -79,14 +85,8 @@ export default defineComponent({
         }
         case ToolNames.RECT: {
           this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-          // this.ctx.clearRect(
-          //   this.sursorStartPos.x,
-          //   this.sursorStartPos.y,
-          //   getDrawingCoordinates(cursorPosition, this.bounds).x -
-          //     this.sursorStartPos.x,
-          //   getDrawingCoordinates(cursorPosition, this.bounds).y -
-          //     this.sursorStartPos.y
-          // );
+          this.ctx.putImageData(this.tempImage, 0, 0);
+
           this.ctx.strokeRect(
             this.sursorStartPos.x,
             this.sursorStartPos.y,
@@ -95,8 +95,36 @@ export default defineComponent({
             getDrawingCoordinates(cursorPosition, this.bounds).y -
               this.sursorStartPos.y
           );
-          this.ctx.stroke();
+          // this.ctx.stroke();
+          // this.ctx.fill();
           break;
+        }
+        case ToolNames.CIRCLE: {
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          this.ctx.putImageData(this.tempImage, 0, 0);
+          this.ctx.beginPath();
+          const radius = Math.sqrt(
+            Math.pow(
+              this.sursorStartPos.x -
+                getDrawingCoordinates(cursorPosition, this.bounds).x,
+              2
+            ) +
+              Math.pow(
+                this.sursorStartPos.y -
+                  getDrawingCoordinates(cursorPosition, this.bounds).y,
+                2
+              )
+          );
+          this.ctx.arc(
+            this.sursorStartPos.x,
+            this.sursorStartPos.y,
+            radius,
+            0,
+            2 * Math.PI
+          );
+          this.ctx.stroke();
+          // this.ctx.fill();
+          this.ctx.closePath();
         }
       }
     },
@@ -110,7 +138,7 @@ export default defineComponent({
     this.canvas.height = window.innerHeight / 1.2;
     this.canvas.width = window.innerWidth / 1.5;
 
-    EventBus.on("some-event", () => {
+    EventBus.on("save-image", () => {
       this.onSave();
     });
   },
