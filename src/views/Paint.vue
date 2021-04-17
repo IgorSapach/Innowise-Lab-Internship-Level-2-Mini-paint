@@ -72,13 +72,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.drawing {
-  border: 1px solid red;
-  cursor: crosshair;
-}
-.draw-container {
-  height: 100vh;
-}
-</style>

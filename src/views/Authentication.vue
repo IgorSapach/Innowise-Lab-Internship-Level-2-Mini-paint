@@ -1,9 +1,13 @@
 <template>
-  <div class="main d-flex flex-column align-items-center justify-content">
-    <div class="auth-container">
-      <component :is="showLoginForm"></component>
-      <div class="d-flex p-2">
-        Need an account?<button @click="loginForm = !loginForm">
+  <div class="auth">
+    <div class="auth__body">
+      <div class="auth__header">
+        {{ loginForm ? "Login" : "SignUp" }}
+      </div>
+      <component :is="showLoginForm" class="auth__item"></component>
+      <div class="auth__footer">
+        <div class="auth__footer_title">Need an account?</div>
+        <button class="button" @click="loginForm = !loginForm">
           {{ loginForm ? "SignUp" : "LogIn" }}
         </button>
       </div>
@@ -36,7 +40,7 @@ export default defineComponent({
 </script>
 
 <style>
-.main {
+/* .main {
   background: radial-gradient(#25292b, #181c1d);
   height: 100vh;
 }
@@ -56,5 +60,5 @@ export default defineComponent({
   text-align: center;
   font-size: 16px;
   font-weight: 700;
-}
+} */
 </style>
