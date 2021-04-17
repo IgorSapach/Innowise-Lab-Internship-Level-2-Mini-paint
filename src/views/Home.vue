@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div><button @click="openDrawingPad">open drawing pad</button></div>
     <div v-if="haveImages" class="gallery">
       <div v-for="item in images" :key="item" class="gallery__item">
         <img :src="item" class="gallery__item_image" />
@@ -25,19 +24,11 @@ export default defineComponent({
       }
       return false;
     });
-    const openDrawingPad = function () {
-      if (store.getters.userId) {
-        this.$router.push({
-          name: "paint",
-          params: { uid: store.getters.userId },
-        });
-      }
-    };
     onMounted(() => {
       store.dispatch("init");
     });
 
-    return { images, haveImages, openDrawingPad };
+    return { images, haveImages };
   },
 });
 </script>

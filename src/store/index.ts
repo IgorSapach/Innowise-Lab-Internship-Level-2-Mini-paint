@@ -5,25 +5,17 @@ import drawingOptions from "./drawing-options";
 
 export default createStore({
   state: {
-    isAuth: false,
     userId: "",
-    key: "",
     savedUserImages: {},
   },
   getters: {
-    isAuth: (state: { isAuth: boolean }) => state.isAuth,
+    isAuth: (state: { userId: string }) => state.userId !== "",
     userId: (state: { userId: string }) => state.userId,
     savedUsersImages: (state) => state.savedUserImages,
   },
   mutations: {
-    setUserIsAuth(state, payload) {
-      state.isAuth = payload;
-    },
     setUserId(state, payload) {
       state.userId = payload;
-    },
-    setKey(state, payload) {
-      state.key = payload;
     },
     setUserImages(state, payload) {
       state.savedUserImages = payload;
@@ -45,7 +37,6 @@ export default createStore({
         .auth()
         .createUserWithEmailAndPassword(vm.email, vm.password)
         .then((resp: any) => {
-          commit("setUserIsAuth", true);
           commit("setUserId", resp.user.uid);
           localStorage.setItem(
             "userId",
@@ -59,7 +50,6 @@ export default createStore({
         .auth()
         .signInWithEmailAndPassword(vm.email, vm.password)
         .then((resp: any) => {
-          commit("setUserIsAuth", true);
           commit("setUserId", resp.user.uid);
           localStorage.setItem(
             "userId",
@@ -78,6 +68,14 @@ export default createStore({
         .ref(`${state.userId}/`)
         .on("value", function (dataSnapshot) {
           commit("setUserImages", dataSnapshot.val());
+        });
+    },
+    logOff() {
+      firebaseApp
+        .auth()
+        .signOut()
+        .then(() => {
+          router.push({ name: "authentication" });
         });
     },
   },
