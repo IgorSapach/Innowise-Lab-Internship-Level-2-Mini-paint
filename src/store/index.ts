@@ -1,11 +1,14 @@
 import { createStore } from "vuex";
 import firebase from "firebase";
 import router from "@/router";
+import drawingOptions from "./drawing-options";
 
 export default createStore({
   state: {
     isAuth: false,
     userId: "",
+    key: "",
+    savedUserImages: {},
   },
   getters: {
     isAuth: (state) => state.isAuth,
@@ -18,18 +21,24 @@ export default createStore({
     setUserId(state, payload) {
       state.userId = payload;
     },
+    setKey(state, payload) {
+      state.key = payload;
+    },
+    setUserImages(state, payload) {
+      // console.log(payload);
+      state.savedUserImages = payload;
+    },
   },
   actions: {
-    init({ commit, state }) {
-      const userId = JSON.parse(localStorage.getItem("userId") || "{}");
-      if (userId.userId) {
-        commit("setUserId", userId.userId);
-        commit("setUserIsAuth", true);
-        router.push({
-          name: "paint",
-          params: { uid: state.userId },
-        });
-      }
+    init({ commit, dispatch }) {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          commit("setUserId", user.uid);
+          dispatch("getUserImages").then(() => {
+            router.push({ name: "home" });
+          });
+        }
+      });
     },
     signUp({ commit }, vm) {
       return firebaseApp
@@ -59,6 +68,30 @@ export default createStore({
         })
         .catch((err) => alert(err.message));
     },
+
+    onSaveImage({ commit, state }, vm) {
+      // if (state.key == "") {
+      // console.log(firebaseApp.database().ref("user"));
+      // commit("setKey", firebaseApp.database().ref().push().key);
+      // const image = vm.toDataURL();
+
+      // console.log(state.key);
+      firebaseApp.database().ref(`${state.userId}/`).push(vm.toDataURL());
+      // firebaseApp.database().ref().push();
+      // .then((resp) => console.log(resp));
+      // }
+    },
+    getUserImages({ state, commit }) {
+      return firebaseApp
+        .database()
+        .ref(`${state.userId}/`)
+        .on("value", function (dataSnapshot) {
+          commit("setUserImages", dataSnapshot.val());
+        });
+    },
+  },
+  modules: {
+    drawingOptions,
   },
 });
 

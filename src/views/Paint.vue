@@ -92,13 +92,3 @@ export default defineComponent({
   // },
 });
 </script>
-
-<style scoped>
-.drawing {
-  border: 1px solid red;
-  cursor: crosshair;
-}
-.p-2 {
-  padding: 2rem;
-}
-</style>

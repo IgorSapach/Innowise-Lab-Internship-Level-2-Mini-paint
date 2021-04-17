@@ -1,0 +1,106 @@
+@import "./variables.scss";
+* {    
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: $black;
+  text-align: left;
+}
+body{
+  margin: 0;
+  overflow: hidden;
+}
+.button {
+  transition: all 0.3s;
+  background-color: $lightBlue;
+  border: none;
+  color: $white;
+  text-align: center;
+  border-radius: 5px 5px 5px 5px;
+  padding: 0.7rem 1rem;
+  &:hover{
+   background-color: $deepLightBlue;
+}
+
+}
+.gallery {
+
+  display: flex;
+  overflow: auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+    &__item {
+      width: 500px;
+      }
+    &__item_image{
+      width: 100%;
+      background-color: #ffffff
+    }
+  }
+.auth {
+  background: $white; 
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  &__body {
+    width: 400px;
+    box-shadow: 0 30px 60px 0 rgb(0 0 0 / 30%);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  &__header {
+  text-align: center;
+  padding: 1rem;
+}
+  &__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center
+  }
+  &__form{
+     width: 100%;
+  }
+  &__form_item{
+    text-align: center;
+    width: 100%;
+  }
+  &__form_input{        
+    background-color: $lightGray;
+    border: none;
+    color: $black;
+    padding: 15px 32px;
+    text-align: center;
+    margin: 5px;
+    width: 80%;
+    border: 2px solid $lightGray;
+    border-radius: 5px 5px 5px 5px;
+    }
+  &__form_button{
+    padding: 15px 80px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 13px;
+    box-shadow: 0 10px 30px 0 rgb(95 186 233 / 40%);
+    margin: 5px 20px 40px 20px;
+  }
+  &__footer {
+    padding: 2rem;
+    border-top: 1px solid $gray;
+    background-color: $lightGray;
+    display: flex;
+    justify-content: center;
+    align-items:center
+  }
+  &__footer_title{
+    padding-right: 2rem;
+  }
+}
+
+
+@import "./reset.scss";
