@@ -1,7 +1,7 @@
 <template>
-  <div class="d-flex justify-content-center align-items-center height-100">
-    <draw-area />
-    <instruments />
+  <div class="paint">
+    <draw-area class="paint__draw-area" />
+    <instruments class="paint__instruments" />
   </div>
 </template>
 <script>

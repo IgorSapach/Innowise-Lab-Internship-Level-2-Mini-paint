@@ -45,7 +45,7 @@ export default createStore({
         })
         .catch((err) => alert(err.message));
     },
-    logIn({ dispatch, commit }, vm) {
+    logIn({ commit }, vm) {
       return firebaseApp
         .auth()
         .signInWithEmailAndPassword(vm.email, vm.password)
@@ -58,8 +58,13 @@ export default createStore({
         })
         .catch((err) => alert(err.message));
     },
-    onSaveImage({ commit, state }, vm) {
-      firebaseApp.database().ref(`${state.userId}/`).push(vm.toDataURL());
+    onSaveImage({ state }, vm) {
+      firebaseApp
+        .database()
+        .ref(`${state.userId}/`)
+        .push(vm.toDataURL())
+        .then(() => router.push({ name: "home" }))
+        .catch((err) => alert(err.message));
     },
 
     getUserImages({ state, commit }) {
@@ -70,11 +75,12 @@ export default createStore({
           commit("setUserImages", dataSnapshot.val());
         });
     },
-    logOff() {
+    logOff({ commit }) {
       firebaseApp
         .auth()
         .signOut()
         .then(() => {
+          commit("setUserId", "");
           router.push({ name: "authentication" });
         });
     },

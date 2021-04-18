@@ -118,5 +118,45 @@ height: 92vh;
       vertical-align: bottom;
     }
   }
+.paint {
+  display:flex;
+  justify-content: center;
+  align-items:center;
+  &__draw-area{
+    border:1px solid $gray;
+    background-color: $white;
+    box-shadow: 0 30px 60px 0 rgb(0 0 0 / 30%);
+  }
+  &__instruments{
+    width:160px;
+    background-color: $white;
+    border:1px solid $gray;
+    z-index: 1;
+    padding: 1rem;
+
+  }
+  &__instruments_item{
+    margin:3px;
+    padding: 3px;
+    display: inline-block;
+  }
+  &__instruments_item_button{
+    display: inline-block;
+    min-width: 35px;
+    margin: 3px;
+    padding: 3px;
+  }
+  &__instruments_item_input{
+    width: 100%;
+  }
+}
+.save_button {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end
+}
+.activeTool {
+  border: 3px solid $gray;
+}
 
 @import "./reset.scss";

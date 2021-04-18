@@ -1,48 +1,71 @@
 <template>
   <div>
-    <div>
+    <div class="paint__instruments_item">
       <input type="color" id="color" v-model="drawingProperties.lineColor" />
     </div>
-    <div>
+    <div class="paint__instruments_item">
       <input
+        class="paint__instruments_item_input"
         type="range"
         min="1"
         max="100"
         v-model="drawingProperties.drawLineWidth"
       />
-      {{ drawingProperties.drawLineWidth }}
+      {{ drawingProperties.drawLineWidth + "px" }}
     </div>
-    <div>
+    <div class="paint__instruments_item">
       <div
         @click="setActiveTool(ToolNames.PENCIL)"
-        class="tool-selection__item"
+        class="paint__instruments_item"
         :class="{
           activeTool: drawingProperties.activeTool === ToolNames.PENCIL,
         }"
       >
         <font-awesome-icon :icon="['fas', 'pencil-alt']" size="2x" />
       </div>
-      <div
-        @click="setActiveTool(ToolNames.RECT)"
-        class="tool-selection__item"
-        :class="{
-          activeTool: drawingProperties.activeTool === ToolNames.RECT,
-        }"
-      >
-        <font-awesome-icon :icon="['fas', 'square']" size="2x" />
-        <font-awesome-icon :icon="['far', 'square']" size="2x" />
+      <div class="paint__instruments_item">
+        <div
+          @click="setActiveTool(ToolNames.FILL_RECT)"
+          :class="{
+            activeTool: drawingProperties.activeTool === ToolNames.FILL_RECT,
+          }"
+          class="paint__instruments_item_button"
+        >
+          <font-awesome-icon :icon="['fas', 'square']" size="2x" />
+        </div>
+        <div
+          @click="setActiveTool(ToolNames.RECT)"
+          :class="{
+            activeTool: drawingProperties.activeTool === ToolNames.RECT,
+          }"
+          class="paint__instruments_item_button"
+        >
+          <font-awesome-icon :icon="['far', 'square']" size="2x" />
+        </div>
       </div>
-      <div
-        @click="setActiveTool(ToolNames.CIRCLE)"
-        class="tool-selection__item"
-        :class="{
-          activeTool: drawingProperties.activeTool === ToolNames.CIRCLE,
-        }"
-      >
-        <font-awesome-icon :icon="['fas', 'circle']" size="2x" />
-        <font-awesome-icon :icon="['far', 'circle']" size="2x" />
+      <div class="paint__instruments_item">
+        <div
+          @click="setActiveTool(ToolNames.FILL_CIRCLE)"
+          :class="{
+            activeTool: drawingProperties.activeTool === ToolNames.FILL_CIRCLE,
+          }"
+          class="paint__instruments_item_button"
+        >
+          <font-awesome-icon :icon="['fas', 'circle']" size="2x" />
+        </div>
+        <div
+          @click="setActiveTool(ToolNames.CIRCLE)"
+          :class="{
+            activeTool: drawingProperties.activeTool === ToolNames.CIRCLE,
+          }"
+          class="paint__instruments_item_button"
+        >
+          <font-awesome-icon :icon="['far', 'circle']" size="2x" />
+        </div>
       </div>
-      <div><button @click="onSave">save</button></div>
+      <div class="save_button">
+        <button class="button" @click="onSave">save</button>
+      </div>
     </div>
   </div>
 </template>
@@ -74,18 +97,3 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-.tool-selection__item {
-  width: 50px;
-  height: 50px;
-  border: 1px solid gray;
-  border-radius: 5px;
-  background-color: aliceblue;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.activeTool {
-  border: 3px solid black;
-}
-</style>

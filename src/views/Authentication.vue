@@ -38,27 +38,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style>
-/* .main {
-  background: radial-gradient(#25292b, #181c1d);
-  height: 100vh;
-}
-.auth-container {
-  border-radius: 3px;
-
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-.login-button {
-  height: 1.5rem;
-  padding: 0;
-  margin: 0;
-  border: none;
-  border-radius: 3px;
-}
-.login-title {
-  text-align: center;
-  font-size: 16px;
-  font-weight: 700;
-} */
-</style>
