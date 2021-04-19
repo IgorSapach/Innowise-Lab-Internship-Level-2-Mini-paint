@@ -4,7 +4,7 @@
     <instruments class="paint__instruments" />
   </div>
 </template>
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 import instruments from "../components/paint-items/InstrumentsPanel";
 import DrawArea from "../components/paint-items/DrawArea";

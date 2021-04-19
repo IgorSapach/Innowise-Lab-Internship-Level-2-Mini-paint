@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import LogIn from "../components/authentication/LogIn";
 import SignUp from "../components/authentication/SignUp";
 

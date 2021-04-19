@@ -22,9 +22,10 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
+import router from "@/router";
 
 export default defineComponent({
   setup() {
@@ -35,7 +36,9 @@ export default defineComponent({
 
     const store = useStore();
     const signUp = function () {
-      store.dispatch("signUp", signUpUserCredentionals);
+      store
+        .dispatch("signUp", signUpUserCredentionals)
+        .then(() => router.push({ name: "home" }));
     };
     return {
       signUp,
