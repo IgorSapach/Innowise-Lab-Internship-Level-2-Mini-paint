@@ -6,16 +6,23 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "home",
     component: () => import("../views/Home.vue"),
+    meta: { requiresAuth: true },
   },
   {
-    path: "/authentication",
-    name: "authentication",
-    component: () => import("../views/Authentication.vue"),
+    path: "/signUp",
+    name: "signUp",
+    component: () => import("../views/SignUp.vue"),
+  },
+  {
+    path: "/login",
+    name: "logIn",
+    component: () => import("../views/LogIn.vue"),
   },
   {
     path: "/paint/:uid",
     name: "paint",
     component: () => import("../views/Paint.vue"),
+    meta: { requiresAuth: true },
   },
 ];
 
@@ -24,14 +31,16 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((from, to, next) => {
-  if (
-    to.name !== "authentication" &&
-    !store.getters.isAuth &&
-    from.name !== "authentication"
-  ) {
-    next({ name: "authentication" });
-  } else next();
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((route) => route.meta?.requiresAuth)) {
+    if (store.getters.isAuth) {
+      next();
+    } else {
+      next({ name: "logIn" });
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

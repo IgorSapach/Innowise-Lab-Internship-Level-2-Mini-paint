@@ -13,12 +13,12 @@ export default createStore({
     userId: (state: { userId: string }) => state.userId,
   },
   mutations: {
-    setUserId(state: { userId: string }, payload: string) {
+    setUserId(state: { userId: string }, payload: string): void {
       state.userId = payload;
     },
   },
   actions: {
-    init({ commit }) {
+    init({ commit }): void {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           commit("setUserId", user.uid);
@@ -50,13 +50,13 @@ export default createStore({
         })
         .catch((err) => alert(err.message));
     },
-    logOff({ commit }) {
+    logOff({ commit }): void {
       firebase
         .auth()
         .signOut()
         .then(() => {
           commit("setUserId", "");
-          router.push({ name: "authentication" });
+          router.push({ name: "login" });
         });
     },
   },

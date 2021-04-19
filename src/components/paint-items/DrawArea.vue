@@ -13,26 +13,33 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, reactive } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import * as ToolNames from "@/const/draw-tool-names";
-import { EventBus } from "@/EventBus";
-import { getDrawingCoordinates } from "@/service/canvas-service";
+import * as ToolNames from "@/const/draw-tool-names.js";
+import { EventBus } from "@/EventBus.js";
 import router from "@/router";
+
+import {
+  getDrawingCoordinates,
+  pencil,
+  rect,
+  circle,
+} from "@/service/canvas-service";
 
 export default defineComponent({
   setup() {
     let painting = false;
     const canvas = ref<HTMLCanvasElement | null>(null);
-    let ctx: any = null;
-    let cursorStartPos: any = {
-      x: null,
-      y: null,
+    let ctx: CanvasRenderingContext2D | null = null;
+    let cursorStartPos: { x: number; y: number } = {
+      x: 0,
+      y: 0,
     };
-    let tempImageData: any = [];
+    let tempImageData: ImageData;
 
     const store = useStore();
     const drawingProperties = store.state.drawingOptions;
+
     const bounds = computed(() => {
       if (canvas.value !== null) {
         return {
@@ -56,19 +63,22 @@ export default defineComponent({
         canvasSize: canvasSize,
       };
     });
+
     const startPainting = function (cursorPosition: { x: number; y: number }) {
       painting = true;
       cursorStartPos = getDrawingCoordinates(cursorPosition, bounds.value);
-      tempImageData = ctx.getImageData(
-        0,
-        0,
-        canvasSize.value.width,
-        canvasSize.value.height
-      );
+      if (ctx)
+        tempImageData = ctx.getImageData(
+          0,
+          0,
+          canvasSize.value.width,
+          canvasSize.value.height
+        );
       draw(cursorPosition);
     };
+
     const draw = function (cursorPosition: { x: number; y: number }) {
-      if (!painting) return;
+      if (!painting || ctx === null) return;
       ctx.lineCap = "round";
       ctx.fillStyle = drawingProperties.lineColor;
       ctx.strokeStyle = drawingProperties.lineColor;
@@ -76,7 +86,6 @@ export default defineComponent({
       const cursorValues = {
         cursorStartPos: cursorStartPos,
         cursorPosition: getDrawingCoordinates(cursorPosition, bounds.value),
-        isFill: false,
       };
       if (store.getters.activeTool !== ToolNames.PENCIL)
         ctx.putImageData(tempImageData, 0, 0);
@@ -103,10 +112,12 @@ export default defineComponent({
         }
       }
     };
+
     const finishedPainting = function () {
       painting = false;
-      ctx.beginPath();
+      if (ctx) ctx.beginPath();
     };
+
     const onSave = () => {
       if (canvas.value)
         store.dispatch("onSaveImage", canvas.value.toDataURL()).then(() => {
@@ -138,51 +149,4 @@ export default defineComponent({
     };
   },
 });
-//TODO Move this functions to service, optimize call parameters
-function pencil(canvas: any, properties: any) {
-  canvas.ctx.lineTo(properties.cursorPosition.x, properties.cursorPosition.y);
-  canvas.ctx.stroke();
-  canvas.ctx.beginPath();
-  canvas.ctx.moveTo(properties.cursorPosition.x, properties.cursorPosition.y);
-  return canvas.ctx;
-}
-function rect(canvas: any, properties: any, isFill = false) {
-  if (isFill) {
-    canvas.ctx.fillRect(
-      properties.cursorStartPos.x,
-      properties.cursorStartPos.y,
-      properties.cursorPosition.x - properties.cursorStartPos.x,
-      properties.cursorPosition.y - properties.cursorStartPos.y
-    );
-  } else {
-    canvas.ctx.strokeRect(
-      properties.cursorStartPos.x,
-      properties.cursorStartPos.y,
-      properties.cursorPosition.x - properties.cursorStartPos.x,
-      properties.cursorPosition.y - properties.cursorStartPos.y
-    );
-  }
-  return canvas.ctx;
-}
-function circle(canvas: any, properties: any, isFill = false) {
-  canvas.ctx.beginPath();
-  const radius = Math.sqrt(
-    Math.pow(properties.cursorStartPos.x - properties.cursorPosition.x, 2) +
-      Math.pow(properties.cursorStartPos.y - properties.cursorPosition.y, 2)
-  );
-  canvas.ctx.arc(
-    properties.cursorStartPos.x,
-    properties.cursorStartPos.y,
-    radius,
-    0,
-    2 * Math.PI
-  );
-  if (isFill) {
-    canvas.ctx.fill();
-  } else {
-    canvas.ctx.stroke();
-  }
-  canvas.ctx.closePath();
-  return canvas.ctx;
-}
 </script>

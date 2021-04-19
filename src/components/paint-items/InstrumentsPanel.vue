@@ -72,8 +72,8 @@
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import { useStore } from "vuex";
-import * as ToolNames from "@/const/draw-tool-names";
-import { EventBus } from "@/EventBus";
+import * as ToolNames from "@/const/draw-tool-names.js";
+import { EventBus } from "@/EventBus.js";
 
 export default defineComponent({
   data() {
@@ -84,16 +84,14 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const drawingProperties = reactive(store.state.drawingOptions);
-    const setActiveTool = function (value) {
+    const setActiveTool = function (value: string) {
       store.commit("setActiveTool", value);
     };
-
-    return { drawingProperties, setActiveTool };
-  },
-  methods: {
-    onSave() {
+    const onSave = () => {
       EventBus.emit("save-image");
-    },
+    };
+
+    return { drawingProperties, setActiveTool, onSave };
   },
 });
 </script>
