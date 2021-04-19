@@ -12,218 +12,177 @@
   </canvas>
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script lang="ts">
+import { computed, defineComponent, onMounted, ref, reactive } from "vue";
 import { useStore } from "vuex";
 import * as ToolNames from "@/const/draw-tool-names";
 import { EventBus } from "@/EventBus";
+import { getDrawingCoordinates } from "@/service/canvas-service";
+import router from "@/router";
 
 export default defineComponent({
-  data() {
-    return {
-      painting: false,
-      canvas: null,
-      ctx: null,
-      sursorStartPos: {
-        x: null,
-        y: null,
-      },
-      tempImage: [],
-    };
-  },
   setup() {
+    let painting = false;
+    const canvas = ref<HTMLCanvasElement | null>(null);
+    let ctx: any = null;
+    let cursorStartPos: any = {
+      x: null,
+      y: null,
+    };
+    let tempImageData: any = [];
+
     const store = useStore();
     const drawingProperties = store.state.drawingOptions;
-
-    return { drawingProperties };
-  },
-  computed: {
-    bounds() {
+    const bounds = computed(() => {
+      if (canvas.value !== null) {
+        return {
+          left: canvas.value.getBoundingClientRect().left,
+          top: canvas.value.getBoundingClientRect().top,
+        };
+      }
+      return { left: 0, top: 0 };
+    });
+    const canvasSize = computed(() => {
+      if (canvas.value !== null)
+        return {
+          width: canvas.value.width,
+          height: canvas.value.height,
+        };
+      return { width: 0, height: 0 };
+    });
+    const canvasValues = computed(() => {
       return {
-        left: this.canvas.getBoundingClientRect().left,
-        top: this.canvas.getBoundingClientRect().top,
+        ctx: ctx,
+        canvasSize: canvasSize,
       };
-    },
-  },
-  methods: {
-    startPainting(cursorPosition) {
-      this.painting = true;
-      this.sursorStartPos = getDrawingCoordinates(cursorPosition, this.bounds);
-      this.tempImage = this.ctx.getImageData(
+    });
+    const startPainting = function (cursorPosition: { x: number; y: number }) {
+      painting = true;
+      cursorStartPos = getDrawingCoordinates(cursorPosition, bounds.value);
+      tempImageData = ctx.getImageData(
         0,
         0,
-        this.canvas.width,
-        this.canvas.height
+        canvasSize.value.width,
+        canvasSize.value.height
       );
-      this.draw(cursorPosition);
-    },
-    finishedPainting() {
-      this.painting = false;
-      this.ctx.beginPath();
-    },
-    draw(cursorPosition) {
-      if (!this.painting) return;
-      this.ctx.lineCap = "round";
-      this.ctx.fillStyle = this.drawingProperties.lineColor;
-      this.ctx.strokeStyle = this.drawingProperties.lineColor;
-      this.ctx.lineWidth = this.drawingProperties.drawLineWidth;
-      const canvasSize = {
-        with: this.canvas.width,
-        height: this.canvas.height,
+      draw(cursorPosition);
+    };
+    const draw = function (cursorPosition: { x: number; y: number }) {
+      if (!painting) return;
+      ctx.lineCap = "round";
+      ctx.fillStyle = drawingProperties.lineColor;
+      ctx.strokeStyle = drawingProperties.lineColor;
+      ctx.lineWidth = drawingProperties.drawLineWidth;
+      const cursorValues = {
+        cursorStartPos: cursorStartPos,
+        cursorPosition: getDrawingCoordinates(cursorPosition, bounds.value),
+        isFill: false,
       };
-      switch (this.$store.getters["activeTool"]) {
+      if (store.getters.activeTool !== ToolNames.PENCIL)
+        ctx.putImageData(tempImageData, 0, 0);
+      switch (store.getters.activeTool) {
         case ToolNames.PENCIL: {
-          pencil(this.ctx, cursorPosition, this.bounds);
+          pencil(canvasValues.value, cursorValues);
           break;
         }
         case ToolNames.FILL_RECT: {
-          fillRect(
-            this.ctx,
-            cursorPosition,
-            this.sursorStartPos,
-            canvasSize,
-            this.tempImage,
-            this.bounds
-          );
+          rect(canvasValues.value, cursorValues, true);
           break;
         }
         case ToolNames.RECT: {
-          strokeRect(
-            this.ctx,
-            cursorPosition,
-            this.sursorStartPos,
-            canvasSize,
-            this.tempImage,
-            this.bounds
-          );
-          break;
-        }
-        case ToolNames.CIRCLE: {
-          circle(
-            this.ctx,
-            cursorPosition,
-            this.sursorStartPos,
-            canvasSize,
-            this.tempImage,
-            this.bounds
-          );
+          rect(canvasValues.value, cursorValues);
           break;
         }
         case ToolNames.FILL_CIRCLE: {
-          circle(
-            this.ctx,
-            cursorPosition,
-            this.sursorStartPos,
-            canvasSize,
-            this.tempImage,
-            this.bounds,
-            true
-          );
+          circle(canvasValues.value, cursorValues, true);
+          break;
+        }
+        case ToolNames.CIRCLE: {
+          circle(canvasValues.value, cursorValues);
           break;
         }
       }
-    },
-    onSave() {
-      this.$store.dispatch("onSaveImage", this.canvas);
-    },
-  },
-  mounted() {
-    this.canvas = this.$refs.canvas;
-    this.ctx = this.canvas.getContext("2d");
-    this.canvas.height = window.innerHeight / 1.2;
-    this.canvas.width = window.innerWidth / 1.5;
+    };
+    const finishedPainting = function () {
+      painting = false;
+      ctx.beginPath();
+    };
+    const onSave = () => {
+      if (canvas.value)
+        store.dispatch("onSaveImage", canvas.value.toDataURL()).then(() => {
+          router.push({ name: "home" });
+        });
+    };
 
-    EventBus.on("save-image", () => {
-      this.onSave();
+    onMounted(() => {
+      ctx = canvas.value ? canvas.value.getContext("2d") : null;
+      if (canvas.value) canvas.value.height = window.innerHeight / 1.2;
+      if (canvas.value) canvas.value.width = window.innerWidth / 1.5;
+
+      EventBus.on("save-image", () => {
+        onSave();
+      });
     });
+
+    return {
+      drawingProperties,
+      canvas,
+      ctx,
+      bounds,
+      canvasSize,
+      canvasValues,
+      startPainting,
+      draw,
+      finishedPainting,
+      onSave,
+    };
   },
 });
 //TODO Move this functions to service, optimize call parameters
-function getDrawingCoordinates(cursorPosition, bounds) {
-  return {
-    x: parseInt(cursorPosition.x - bounds.left),
-    y: parseInt(cursorPosition.y - bounds.top),
-  };
+function pencil(canvas: any, properties: any) {
+  canvas.ctx.lineTo(properties.cursorPosition.x, properties.cursorPosition.y);
+  canvas.ctx.stroke();
+  canvas.ctx.beginPath();
+  canvas.ctx.moveTo(properties.cursorPosition.x, properties.cursorPosition.y);
+  return canvas.ctx;
 }
-function pencil(ctx, cursorPosition, bounds) {
-  ctx.lineTo(
-    getDrawingCoordinates(cursorPosition, bounds).x,
-    getDrawingCoordinates(cursorPosition, bounds).y
-  );
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(
-    getDrawingCoordinates(cursorPosition, bounds).x,
-    getDrawingCoordinates(cursorPosition, bounds).y
-  );
-  return ctx;
-}
-function fillRect(
-  ctx,
-  cursorPosition,
-  sursorStartPos,
-  canvas,
-  tempImage,
-  bounds
-) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.putImageData(tempImage, 0, 0);
-
-  ctx.fillRect(
-    sursorStartPos.x,
-    sursorStartPos.y,
-    getDrawingCoordinates(cursorPosition, bounds).x - sursorStartPos.x,
-    getDrawingCoordinates(cursorPosition, bounds).y - sursorStartPos.y
-  );
-  return ctx;
-}
-function strokeRect(
-  ctx,
-  cursorPosition,
-  sursorStartPos,
-  canvas,
-  tempImage,
-  bounds
-) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.putImageData(tempImage, 0, 0);
-  ctx.strokeRect(
-    sursorStartPos.x,
-    sursorStartPos.y,
-    getDrawingCoordinates(cursorPosition, bounds).x - sursorStartPos.x,
-    getDrawingCoordinates(cursorPosition, bounds).y - sursorStartPos.y
-  );
-  return ctx;
-}
-function circle(
-  ctx,
-  cursorPosition,
-  sursorStartPos,
-  canvas,
-  tempImage,
-  bounds,
-  isFill
-) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.putImageData(tempImage, 0, 0);
-  ctx.beginPath();
-  const radius = Math.sqrt(
-    Math.pow(
-      sursorStartPos.x - getDrawingCoordinates(cursorPosition, bounds).x,
-      2
-    ) +
-      Math.pow(
-        sursorStartPos.y - getDrawingCoordinates(cursorPosition, bounds).y,
-        2
-      )
-  );
-  ctx.arc(sursorStartPos.x, sursorStartPos.y, radius, 0, 2 * Math.PI);
+function rect(canvas: any, properties: any, isFill = false) {
   if (isFill) {
-    ctx.fill();
+    canvas.ctx.fillRect(
+      properties.cursorStartPos.x,
+      properties.cursorStartPos.y,
+      properties.cursorPosition.x - properties.cursorStartPos.x,
+      properties.cursorPosition.y - properties.cursorStartPos.y
+    );
   } else {
-    ctx.stroke();
+    canvas.ctx.strokeRect(
+      properties.cursorStartPos.x,
+      properties.cursorStartPos.y,
+      properties.cursorPosition.x - properties.cursorStartPos.x,
+      properties.cursorPosition.y - properties.cursorStartPos.y
+    );
   }
-  ctx.closePath();
-  return ctx;
+  return canvas.ctx;
+}
+function circle(canvas: any, properties: any, isFill = false) {
+  canvas.ctx.beginPath();
+  const radius = Math.sqrt(
+    Math.pow(properties.cursorStartPos.x - properties.cursorPosition.x, 2) +
+      Math.pow(properties.cursorStartPos.y - properties.cursorPosition.y, 2)
+  );
+  canvas.ctx.arc(
+    properties.cursorStartPos.x,
+    properties.cursorStartPos.y,
+    radius,
+    0,
+    2 * Math.PI
+  );
+  if (isFill) {
+    canvas.ctx.fill();
+  } else {
+    canvas.ctx.stroke();
+  }
+  canvas.ctx.closePath();
+  return canvas.ctx;
 }
 </script>

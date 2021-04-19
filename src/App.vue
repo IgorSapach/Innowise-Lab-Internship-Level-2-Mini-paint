@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, defineComponent, onMounted } from "vue";
 import taskBar from "../src/components/task-bar/TaskBar.vue";
 import { useStore } from "vuex";

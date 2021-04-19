@@ -69,7 +69,7 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { defineComponent, reactive } from "vue";
 import { useStore } from "vuex";
 import * as ToolNames from "@/const/draw-tool-names";

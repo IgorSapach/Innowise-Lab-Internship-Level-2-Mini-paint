@@ -8,22 +8,23 @@
   </div>
 </template>
 
-<script>
-import { computed, defineComponent } from "vue";
+<script lang="ts">
+import { computed, defineComponent, onMounted } from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({
   setup() {
     const store = useStore();
     const images = computed(() => {
-      return store.getters.savedUsersImages;
+      return store.getters.savedImages;
     });
     const haveImages = computed(() => {
-      for (let key in store.getters.savedUsersImages) {
+      for (let key in store.getters.savedImages) {
         return true;
       }
       return false;
     });
+    onMounted(() => store.dispatch("getImages"));
     return { images, haveImages };
   },
 });

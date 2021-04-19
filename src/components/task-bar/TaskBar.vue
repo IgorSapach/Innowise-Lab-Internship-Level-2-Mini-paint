@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import router from "@/router";
