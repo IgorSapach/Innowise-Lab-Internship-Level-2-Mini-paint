@@ -1,5 +1,5 @@
-import { GetterTree } from "vuex";
-import { State } from "./state";
+import { GetterTree } from 'vuex';
+import { State } from './state';
 
 export type Getters = {
   userId(state: State): string;
@@ -19,7 +19,7 @@ export const getters: GetterTree<State, State> & Getters = {
     return state.userId;
   },
   isAuth: (state) => {
-    return state.userId !== "";
+    return state.userId !== '';
   },
   savedImages: (state) => {
     return state.savedImages;

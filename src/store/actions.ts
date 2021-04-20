@@ -1,16 +1,16 @@
-import { ActionTree, ActionContext } from "vuex";
-import { state, State } from "./state";
-import { Mutations } from "./mutations";
-import { ActionTypes } from "./action-types";
-import { MutationTypes } from "./mutation-types";
-import firebase from "firebase";
+import { ActionTree, ActionContext } from 'vuex';
+import { state, State } from './state';
+import { Mutations } from './mutations';
+import { ActionTypes } from './action-types';
+import { MutationTypes } from './mutation-types';
+import firebase from 'firebase';
 
 type AugmentedActionContext = {
   commit<K extends keyof Mutations>(
     key: K,
     payload: Parameters<Mutations[K]>[1]
   ): ReturnType<Mutations[K]>;
-} & Omit<ActionContext<State, State>, "commit">;
+} & Omit<ActionContext<State, State>, 'commit'>;
 
 export interface Actions {
   [ActionTypes.INIT]({ commit }, undefined): Promise<void>;
@@ -96,7 +96,7 @@ export const actions: ActionTree<State, State> & Actions = {
         .auth()
         .signOut()
         .then(() => {
-          commit(MutationTypes.SET_USER_ID, "");
+          commit(MutationTypes.SET_USER_ID, '');
         });
       resolve();
     });
@@ -106,7 +106,7 @@ export const actions: ActionTree<State, State> & Actions = {
     firebase
       .database()
       .ref(`${userId}/`)
-      .on("value", (dataSnapshot) => {
+      .on('value', (dataSnapshot) => {
         // console.log(dataSnapshot.val());
         commit(MutationTypes.SET_IMAGES, dataSnapshot.val());
       });

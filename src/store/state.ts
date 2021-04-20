@@ -1,11 +1,11 @@
 export const state = {
   counter: 0,
-  userId: "",
+  userId: '',
   savedImages: {},
   drawingOptions: {
     drawLineWidth: 1,
-    lineColor: "#000000",
-    activeTool: "pencil",
+    lineColor: '#000000',
+    activeTool: 'pencil',
   },
 };
 export type State = typeof state;

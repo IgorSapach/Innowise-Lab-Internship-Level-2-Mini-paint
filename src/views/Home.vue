@@ -9,10 +9,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from "vue";
-import { useStore } from "../store/store";
+import { computed, defineComponent, onMounted } from 'vue';
+import { useStore } from '../store/store';
 
-import { ActionTypes } from "@/store/action-types";
+import { ActionTypes } from '@/store/action-types';
 
 export default defineComponent({
   setup() {

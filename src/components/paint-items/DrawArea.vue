@@ -13,20 +13,20 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from "vue";
-import { useStore } from "@/store/store";
-import * as ToolNames from "@/const/draw-tool-names.js";
-import { EventBus } from "@/EventBus.js";
-import router from "@/router";
+import { computed, defineComponent, onMounted, ref } from 'vue';
+import { useStore } from '@/store/store';
+import * as ToolNames from '@/const/draw-tool-names.js';
+import { EventBus } from '@/EventBus.js';
+import router from '@/router';
 
-import { ActionTypes } from "@/store/action-types";
+import { ActionTypes } from '@/store/action-types';
 
 import {
   getDrawingCoordinates,
   pencil,
   rect,
   circle,
-} from "@/service/canvas-service";
+} from '@/service/canvas-service';
 
 export default defineComponent({
   setup() {
@@ -83,7 +83,7 @@ export default defineComponent({
     const draw = function (cursorPosition: { x: number; y: number }) {
       if (!painting || ctx === null) return;
 
-      ctx.lineCap = "round";
+      ctx.lineCap = 'round';
       ctx.fillStyle = drawingProperties.lineColor;
       ctx.strokeStyle = drawingProperties.lineColor;
       ctx.lineWidth = drawingProperties.drawLineWidth;
@@ -129,16 +129,16 @@ export default defineComponent({
       if (canvas.value) {
         let image = canvas.value.toDataURL();
         store.dispatch(ActionTypes.ON_SAVE_IMAGE, image);
-        router.push({ name: "home" });
+        router.push({ name: 'home' });
       }
     };
 
     onMounted(() => {
-      ctx = canvas.value ? canvas.value.getContext("2d") : null;
+      ctx = canvas.value ? canvas.value.getContext('2d') : null;
       if (canvas.value) canvas.value.height = window.innerHeight / 1.2;
       if (canvas.value) canvas.value.width = window.innerWidth / 1.5;
 
-      EventBus.on("save-image", () => {
+      EventBus.on('save-image', () => {
         onSave();
       });
     });

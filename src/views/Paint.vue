@@ -5,9 +5,9 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import instruments from "@/components/paint-items/InstrumentsPanel.vue";
-import DrawArea from "@/components/paint-items/DrawArea.vue";
+import { defineComponent } from 'vue';
+import instruments from '@/components/paint-items/InstrumentsPanel.vue';
+import DrawArea from '@/components/paint-items/DrawArea.vue';
 
 export default defineComponent({
   components: { DrawArea, instruments },
