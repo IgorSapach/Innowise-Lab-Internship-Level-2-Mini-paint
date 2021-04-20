@@ -39,19 +39,22 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useStore } from "vuex";
+import { useStore } from "../store/store";
 import router from "@/router";
+import { ActionTypes } from "../store/action-types";
 
 export default defineComponent({
   setup() {
-    let form = {
+    const form = {
       email: "",
       password: "",
     };
 
     const store = useStore();
     const signUp = function () {
-      store.dispatch("signUp", form).then(() => router.push({ name: "home" }));
+      store
+        .dispatch(ActionTypes.SIGN_UP, form)
+        .then(() => router.push({ name: "home" }));
     };
     const goToLogIn = () => {
       router.push({ name: "logIn" });

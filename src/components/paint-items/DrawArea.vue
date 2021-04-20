@@ -40,7 +40,6 @@ export default defineComponent({
     let tempImageData: ImageData;
 
     const store = useStore();
-    console.log(store);
     const drawingProperties = store.state.drawingOptions;
 
     const bounds = computed(() => {
@@ -70,6 +69,7 @@ export default defineComponent({
     const startPainting = function (cursorPosition: { x: number; y: number }) {
       painting = true;
       cursorStartPos = getDrawingCoordinates(cursorPosition, bounds.value);
+
       if (ctx)
         tempImageData = ctx.getImageData(
           0,
@@ -82,16 +82,20 @@ export default defineComponent({
 
     const draw = function (cursorPosition: { x: number; y: number }) {
       if (!painting || ctx === null) return;
+
       ctx.lineCap = "round";
       ctx.fillStyle = drawingProperties.lineColor;
       ctx.strokeStyle = drawingProperties.lineColor;
       ctx.lineWidth = drawingProperties.drawLineWidth;
+
       const cursorValues = {
         cursorStartPos: cursorStartPos,
         cursorPosition: getDrawingCoordinates(cursorPosition, bounds.value),
       };
+
       if (drawingProperties.activeTool !== ToolNames.PENCIL)
         ctx.putImageData(tempImageData, 0, 0);
+
       switch (drawingProperties.activeTool) {
         case ToolNames.PENCIL: {
           pencil(canvasValues.value, cursorValues);

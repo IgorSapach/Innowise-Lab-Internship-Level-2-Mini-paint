@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useStore } from "../store/store";
+import { useStore } from "@/store/store";
 import router from "@/router";
 import { ActionTypes } from "../store/action-types";
 

@@ -15,6 +15,14 @@ type AugmentedActionContext = {
 export interface Actions {
   [ActionTypes.INIT]({ commit }, undefined): Promise<void>;
 
+  [ActionTypes.SIGN_UP](
+    { commit },
+    userCredentials: {
+      email: string;
+      password: string;
+    }
+  ): Promise<void>;
+
   [ActionTypes.LOG_IN](
     { commit }: AugmentedActionContext,
     userCredentials: { email: string; password: string }
@@ -48,6 +56,23 @@ export const actions: ActionTree<State, State> & Actions = {
     });
   },
 
+  [ActionTypes.SIGN_UP]({ commit }, userCredentials) {
+    return new Promise((resolve) => {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(
+          userCredentials.email,
+          userCredentials.password
+        )
+        .then((resp: firebase.auth.UserCredential | null) => {
+          if (resp && resp.user)
+            commit(MutationTypes.SET_USER_ID, resp.user.uid);
+        })
+        .catch((err) => alert(err.message));
+      resolve();
+    });
+  },
+
   [ActionTypes.LOG_IN]({ commit }, userCredentials) {
     return new Promise((resolve) => {
       firebase
@@ -64,6 +89,7 @@ export const actions: ActionTree<State, State> & Actions = {
         .catch((err) => alert(err.message));
     });
   },
+
   [ActionTypes.LOG_OFF]({ commit }) {
     return new Promise((resolve) => {
       firebase
@@ -81,13 +107,13 @@ export const actions: ActionTree<State, State> & Actions = {
       .database()
       .ref(`${userId}/`)
       .on("value", (dataSnapshot) => {
+        // console.log(dataSnapshot.val());
         commit(MutationTypes.SET_IMAGES, dataSnapshot.val());
       });
   },
 
-  [ActionTypes.ON_SAVE_IMAGE]({ commit }, image) {
+  [ActionTypes.ON_SAVE_IMAGE](image) {
     return new Promise((resolve) => {
-      console.log(image);
       firebase
         .database()
         .ref(`${state.userId}/`)

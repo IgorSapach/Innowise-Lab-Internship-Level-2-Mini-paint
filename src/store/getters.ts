@@ -4,7 +4,7 @@ import { State } from "./state";
 export type Getters = {
   userId(state: State): string;
   isAuth(state: State): boolean;
-  savedImages(state: State): any;
+  savedImages(state: State): { image?: HTMLImageElement };
   drawingOptions(
     state: State
   ): {

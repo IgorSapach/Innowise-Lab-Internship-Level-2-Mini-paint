@@ -37,6 +37,6 @@ export type Store = Omit<
   };
 };
 
-export function useStore() {
+export function useStore(): Store {
   return store as Store;
 }
