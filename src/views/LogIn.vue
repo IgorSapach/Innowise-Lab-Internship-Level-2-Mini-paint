@@ -34,26 +34,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { useStore } from "@/store/store";
-import router from "@/router";
-import { ActionTypes } from "../store/action-types";
+import { defineComponent } from 'vue';
+import { useStore } from '@/store/store';
+import router from '@/router';
+import { ActionTypes } from '../store/action-types';
 
 export default defineComponent({
   setup() {
     const form = {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     };
 
     const store = useStore();
     const logIn = function () {
       store.dispatch(ActionTypes.LOG_IN, form).then(() => {
-        router.push({ name: "home" });
+        router.push({ name: 'home' });
       });
     };
     const goToSignUp = function () {
-      router.push({ name: "signUp" });
+      router.push({ name: 'signUp' });
     };
     return {
       logIn,
