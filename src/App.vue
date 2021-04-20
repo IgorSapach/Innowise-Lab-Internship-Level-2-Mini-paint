@@ -7,7 +7,8 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import taskBar from "../src/components/task-bar/TaskBar.vue";
+
+import taskBar from '../src/components/task-bar/TaskBar.vue';
 // import { useStore } from "./store/store";
 
 export default defineComponent({
