@@ -35,8 +35,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useStore } from "vuex";
+import { useStore } from "../store/store";
 import router from "@/router";
+import { ActionTypes } from "../store/action-types";
 
 export default defineComponent({
   setup() {
@@ -47,7 +48,9 @@ export default defineComponent({
 
     const store = useStore();
     const logIn = function () {
-      store.dispatch("logIn", form).then(() => router.push({ name: "home" }));
+      store.dispatch(ActionTypes.LOG_IN, form).then(() => {
+        router.push({ name: "home" });
+      });
     };
     const goToSignUp = function () {
       router.push({ name: "signUp" });

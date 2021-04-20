@@ -10,7 +10,9 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted } from "vue";
-import { useStore } from "vuex";
+import { useStore } from "../store/store";
+
+import { ActionTypes } from "@/store/action-types";
 
 export default defineComponent({
   setup() {
@@ -24,7 +26,9 @@ export default defineComponent({
       }
       return false;
     });
-    onMounted(() => store.dispatch("getImages"));
+    onMounted(() =>
+      store.dispatch(ActionTypes.GET_IMAGES, store.getters.userId)
+    );
     return { images, haveImages };
   },
 });

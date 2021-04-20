@@ -14,10 +14,12 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from "vue";
-import { useStore } from "vuex";
+import { useStore } from "@/store/store";
 import * as ToolNames from "@/const/draw-tool-names.js";
 import { EventBus } from "@/EventBus.js";
 import router from "@/router";
+
+import { ActionTypes } from "@/store/action-types";
 
 import {
   getDrawingCoordinates,
@@ -38,6 +40,7 @@ export default defineComponent({
     let tempImageData: ImageData;
 
     const store = useStore();
+    console.log(store);
     const drawingProperties = store.state.drawingOptions;
 
     const bounds = computed(() => {
@@ -87,9 +90,9 @@ export default defineComponent({
         cursorStartPos: cursorStartPos,
         cursorPosition: getDrawingCoordinates(cursorPosition, bounds.value),
       };
-      if (store.getters.activeTool !== ToolNames.PENCIL)
+      if (drawingProperties.activeTool !== ToolNames.PENCIL)
         ctx.putImageData(tempImageData, 0, 0);
-      switch (store.getters.activeTool) {
+      switch (drawingProperties.activeTool) {
         case ToolNames.PENCIL: {
           pencil(canvasValues.value, cursorValues);
           break;
@@ -119,10 +122,11 @@ export default defineComponent({
     };
 
     const onSave = () => {
-      if (canvas.value)
-        store.dispatch("onSaveImage", canvas.value.toDataURL()).then(() => {
-          router.push({ name: "home" });
-        });
+      if (canvas.value) {
+        let image = canvas.value.toDataURL();
+        store.dispatch(ActionTypes.ON_SAVE_IMAGE, image);
+        router.push({ name: "home" });
+      }
     };
 
     onMounted(() => {

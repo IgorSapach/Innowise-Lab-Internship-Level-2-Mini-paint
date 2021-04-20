@@ -15,8 +15,10 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import { useStore } from "vuex";
+import { useStore } from "@/store/store";
 import router from "@/router";
+
+import { ActionTypes } from "@/store/action-types";
 
 export default defineComponent({
   setup() {
@@ -37,7 +39,9 @@ export default defineComponent({
       }
     };
     const logOff = () => {
-      store.dispatch("logOff");
+      store.dispatch(ActionTypes.LOG_OFF, null).then(() => {
+        router.push({ name: "logIn" });
+      });
     };
     return { goTo, logOff, currentRoute };
   },

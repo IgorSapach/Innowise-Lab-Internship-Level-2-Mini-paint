@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import store from "../store";
+import { useStore } from "../store/store";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,6 +30,8 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
+const store = useStore();
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((route) => route.meta?.requiresAuth)) {
