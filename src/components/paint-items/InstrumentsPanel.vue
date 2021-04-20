@@ -11,7 +11,7 @@
         max="100"
         v-model="drawingProperties.drawLineWidth"
       />
-      {{ drawingProperties.drawLineWidth + "px" }}
+      {{ drawingProperties.drawLineWidth + 'px' }}
     </div>
     <div class="paint__instruments_item">
       <div
@@ -70,10 +70,11 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
-import { useStore } from "vuex";
-import * as ToolNames from "@/const/draw-tool-names.js";
-import { EventBus } from "@/EventBus.js";
+import { defineComponent, reactive } from 'vue';
+import { useStore } from '@/store/store';
+import * as ToolNames from '@/const/draw-tool-names.js';
+import { EventBus } from '@/EventBus.js';
+import { MutationTypes } from '@/store/mutation-types';
 
 export default defineComponent({
   data() {
@@ -85,10 +86,10 @@ export default defineComponent({
     const store = useStore();
     const drawingProperties = reactive(store.state.drawingOptions);
     const setActiveTool = function (value: string) {
-      store.commit("setActiveTool", value);
+      store.commit(MutationTypes.SET_ACTIVE_TOOL, value);
     };
     const onSave = () => {
-      EventBus.emit("save-image");
+      EventBus.emit('save-image');
     };
 
     return { drawingProperties, setActiveTool, onSave };

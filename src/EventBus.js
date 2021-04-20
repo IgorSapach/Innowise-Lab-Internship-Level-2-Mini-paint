@@ -1,2 +1,2 @@
-import TinyEmitter from "tiny-emitter";
+import TinyEmitter from 'tiny-emitter';
 export const EventBus = new TinyEmitter();

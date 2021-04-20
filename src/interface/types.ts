@@ -1,4 +1,4 @@
-import { ComputedRef } from "vue";
+import { ComputedRef } from 'vue';
 
 export interface canvasContext {
   ctx?: CanvasRenderingContext2D | null;

@@ -1,27 +1,27 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import store from "../store";
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { useStore } from '../store/store';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/",
-    name: "home",
-    component: () => import("../views/Home.vue"),
+    path: '/',
+    name: 'home',
+    component: () => import('../views/Home.vue'),
     meta: { requiresAuth: true },
   },
   {
-    path: "/signUp",
-    name: "signUp",
-    component: () => import("../views/SignUp.vue"),
+    path: '/signUp',
+    name: 'signUp',
+    component: () => import('../views/SignUp.vue'),
   },
   {
-    path: "/login",
-    name: "logIn",
-    component: () => import("../views/LogIn.vue"),
+    path: '/login',
+    name: 'logIn',
+    component: () => import('../views/LogIn.vue'),
   },
   {
-    path: "/paint/:uid",
-    name: "paint",
-    component: () => import("../views/Paint.vue"),
+    path: '/paint/:uid',
+    name: 'paint',
+    component: () => import('../views/Paint.vue'),
     meta: { requiresAuth: true },
   },
 ];
@@ -31,12 +31,14 @@ const router = createRouter({
   routes,
 });
 
+const store = useStore();
+
 router.beforeEach((to, from, next) => {
   if (to.matched.some((route) => route.meta?.requiresAuth)) {
     if (store.getters.isAuth) {
       next();
     } else {
-      next({ name: "logIn" });
+      next({ name: 'logIn' });
     }
   } else {
     next();

@@ -6,12 +6,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from "vue";
-import taskBar from "../src/components/task-bar/TaskBar.vue";
-import { useStore } from "vuex";
+import { computed, defineComponent } from 'vue';
+
+import taskBar from '../src/components/task-bar/TaskBar.vue';
+import { useStore } from './store/store';
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   components: {
     taskBar,
   },
@@ -20,9 +21,7 @@ export default defineComponent({
     const isAuth = computed(() => {
       return store.getters.isAuth;
     });
-    onMounted(() => {
-      store.dispatch("init");
-    });
+
     return { isAuth };
   },
 });

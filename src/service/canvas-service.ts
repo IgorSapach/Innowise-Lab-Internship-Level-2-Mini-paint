@@ -1,4 +1,4 @@
-import { canvasContext, cursorProperties } from "@/interface/types";
+import { canvasContext, cursorProperties } from '@/interface/types';
 
 function getDrawingCoordinates(
   cursorPosition: { x: number; y: number },

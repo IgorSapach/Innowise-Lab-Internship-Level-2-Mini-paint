@@ -1,17 +1,19 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
-import dotenv from "dotenv";
-import firebase from "firebase";
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+import { useStore } from './store/store';
+import dotenv from 'dotenv';
+import firebase from 'firebase';
 
-import "@/assets/main.scss";
+import '@/assets/main.scss';
 
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
-import { far } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 library.add(fas, far);
+
+import { ActionTypes } from './store/action-types';
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_API_KEY,
@@ -26,8 +28,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 createApp(App)
-  .use(store)
   .use(router)
-  .component("font-awesome-icon", FontAwesomeIcon)
-  .mount("#app");
+  .component('font-awesome-icon', FontAwesomeIcon)
+  .mount('#app');
 dotenv.config();
+
+const store = useStore();
+store
+  .dispatch(ActionTypes.INIT, null)
+  .then(() => router.push({ name: 'home' }));
