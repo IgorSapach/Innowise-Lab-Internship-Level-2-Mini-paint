@@ -7,6 +7,19 @@
     @mousemove="draw({ x: $event.clientX, y: $event.clientY })"
     @mouseup="finishedPainting"
     @mouseleave="finishedPainting"
+    @touchstart="
+      startPainting({
+        x: $event.touches[0].clientX,
+        y: $event.touches[0].clientY,
+      })
+    "
+    @touchmove="
+      draw({
+        x: $event.touches[0].clientX,
+        y: $event.touches[0].clientY,
+      })
+    "
+    @touchend="finishedPainting"
   >
     This is an interactive drawind pad.
   </canvas>
@@ -127,19 +140,30 @@ export default defineComponent({
 
     const onSave = () => {
       if (canvas.value) {
-        let image = canvas.value.toDataURL();
-        store.dispatch(ActionTypes.ON_SAVE_IMAGE, image);
+        store.dispatch(ActionTypes.ON_SAVE_IMAGE, canvas.value.toDataURL());
         router.push({ name: 'home' });
       }
     };
+    const onClear = () => {
+      if (ctx)
+        ctx.clearRect(0, 0, canvasSize.value.width, canvasSize.value.height);
+    };
 
     onMounted(() => {
+      if (canvas.value == null) return;
       ctx = canvas.value ? canvas.value.getContext('2d') : null;
-      if (canvas.value) canvas.value.height = window.innerHeight / 1.2;
-      if (canvas.value) canvas.value.width = window.innerWidth / 1.5;
+      canvas.value.height = window.innerHeight / 1.4;
+      if (window.innerWidth < 1200) {
+        canvas.value.width = window.innerWidth;
+      } else {
+        if (canvas.value) canvas.value.width = window.innerWidth / 1.5;
+      }
 
       EventBus.on('save-image', () => {
         onSave();
+      });
+      EventBus.on('clear-draw-area', () => {
+        onClear();
       });
     });
 

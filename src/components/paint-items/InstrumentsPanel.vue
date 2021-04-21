@@ -1,76 +1,109 @@
 <template>
   <div>
     <div class="paint__instruments_item">
-      <input type="color" id="color" v-model="drawingProperties.lineColor" />
-    </div>
-    <div class="paint__instruments_item">
-      <input
-        class="paint__instruments_item_input"
-        type="range"
-        min="1"
-        max="100"
-        v-model="drawingProperties.drawLineWidth"
-      />
-      {{ drawingProperties.drawLineWidth + 'px' }}
-    </div>
-    <div class="paint__instruments_item">
-      <div
-        @click="setActiveTool(ToolNames.PENCIL)"
-        class="paint__instruments_item"
-        :class="{
-          activeTool: drawingProperties.activeTool === ToolNames.PENCIL,
-        }"
-      >
-        <font-awesome-icon :icon="['fas', 'pencil-alt']" size="2x" />
+      <div class="paint__instruments_brush-options">
+        <input
+          class="color_picker"
+          type="color"
+          id="color"
+          v-model="drawingProperties.lineColor"
+        />
       </div>
-      <div class="paint__instruments_item">
+      <div class="paint__instruments_brush-options">
+        <input
+          type="range"
+          min="1"
+          max="100"
+          v-model="drawingProperties.drawLineWidth"
+        />
+        <!-- {{ drawingProperties.drawLineWidth + 'px' }} -->
+      </div>
+    </div>
+    <div class="paint__instruments_brush">
+      <div class="paint__instruments_brush-item">
+        <div
+          @click="setActiveTool(ToolNames.PENCIL)"
+          class="paint__instruments_brush-selection"
+          :class="{
+            activeTool: drawingProperties.activeTool === ToolNames.PENCIL,
+          }"
+        >
+          <font-awesome-icon
+            :icon="['fas', 'pencil-alt']"
+            size="2x"
+            :color="iconColor"
+          />
+        </div>
+      </div>
+      <div class="paint__instruments_brush-item">
         <div
           @click="setActiveTool(ToolNames.FILL_RECT)"
           :class="{
             activeTool: drawingProperties.activeTool === ToolNames.FILL_RECT,
           }"
-          class="paint__instruments_item_button"
+          class="paint__instruments_brush-selection"
         >
-          <font-awesome-icon :icon="['fas', 'square']" size="2x" />
+          <font-awesome-icon
+            :icon="['fas', 'square']"
+            size="2x"
+            :color="iconColor"
+          />
         </div>
         <div
           @click="setActiveTool(ToolNames.RECT)"
           :class="{
             activeTool: drawingProperties.activeTool === ToolNames.RECT,
           }"
-          class="paint__instruments_item_button"
+          class="paint__instruments_brush-selection"
         >
-          <font-awesome-icon :icon="['far', 'square']" size="2x" />
+          <font-awesome-icon
+            :icon="['far', 'square']"
+            size="2x"
+            :color="iconColor"
+          />
         </div>
       </div>
-      <div class="paint__instruments_item">
+      <div class="paint__instruments_brush-item">
         <div
           @click="setActiveTool(ToolNames.FILL_CIRCLE)"
           :class="{
             activeTool: drawingProperties.activeTool === ToolNames.FILL_CIRCLE,
           }"
-          class="paint__instruments_item_button"
+          class="paint__instruments_brush-selection"
         >
-          <font-awesome-icon :icon="['fas', 'circle']" size="2x" />
+          <font-awesome-icon
+            :icon="['fas', 'circle']"
+            size="2x"
+            :color="iconColor"
+          />
         </div>
         <div
           @click="setActiveTool(ToolNames.CIRCLE)"
           :class="{
             activeTool: drawingProperties.activeTool === ToolNames.CIRCLE,
           }"
-          class="paint__instruments_item_button"
+          class="paint__instruments_brush-selection"
         >
-          <font-awesome-icon :icon="['far', 'circle']" size="2x" />
+          <font-awesome-icon
+            :icon="['far', 'circle']"
+            size="2x"
+            :color="iconColor"
+          />
         </div>
       </div>
-      <div class="save_button">
-        <button class="button" @click="onSave">save</button>
+    </div>
+    <div class="paint__instruments_item_actions">
+      <div class="action_button">
+        <button class="button" @click="onClear">Clear</button>
+      </div>
+      <div class="action_button">
+        <button class="button" @click="onSave">Save</button>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
+import { computed, defineComponent, reactive } from 'vue';
 import { useStore } from '@/store/store';
 import * as ToolNames from '@/const/draw-tool-names.js';
 import { EventBus } from '@/EventBus.js';
@@ -91,8 +124,12 @@ export default defineComponent({
     const onSave = () => {
       EventBus.emit('save-image');
     };
+    const onClear = () => {
+      EventBus.emit('clear-draw-area');
+    };
+    const iconColor = computed(() => store.getters.drawingOptions.lineColor);
 
-    return { drawingProperties, setActiveTool, onSave };
+    return { drawingProperties, setActiveTool, onSave, onClear, iconColor };
   },
 });
 </script>

@@ -1,5 +1,5 @@
 import { ActionTree, ActionContext } from 'vuex';
-import { state, State } from './state';
+import { State } from './state';
 import { Mutations } from './mutations';
 import { ActionTypes } from './action-types';
 import { MutationTypes } from './mutation-types';
@@ -38,10 +38,7 @@ export interface Actions {
     userId: string
   ): void;
 
-  [ActionTypes.ON_SAVE_IMAGE](
-    { commit }: AugmentedActionContext,
-    image: string
-  ): Promise<void>;
+  [ActionTypes.ON_SAVE_IMAGE]({ getters }, image: string): Promise<void>;
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -107,16 +104,15 @@ export const actions: ActionTree<State, State> & Actions = {
       .database()
       .ref(`${userId}/`)
       .on('value', (dataSnapshot) => {
-        // console.log(dataSnapshot.val());
         commit(MutationTypes.SET_IMAGES, dataSnapshot.val());
       });
   },
 
-  [ActionTypes.ON_SAVE_IMAGE](image) {
+  [ActionTypes.ON_SAVE_IMAGE]({ getters }, image) {
     return new Promise((resolve) => {
       firebase
         .database()
-        .ref(`${state.userId}/`)
+        .ref(`${getters.userId}/`)
         .push(image)
         .catch((err) => alert(err.message));
       resolve();
