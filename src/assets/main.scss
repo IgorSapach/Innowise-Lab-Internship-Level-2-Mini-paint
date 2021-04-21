@@ -1,35 +1,25 @@
-@import "./variables.scss";
-* {    
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+@import './variables.scss';
+
+* {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
-  color: $black;
   text-align: left;
 }
-body{
+body {
   margin: 0;
   overflow: hidden;
 }
-.button {
-  transition: all 0.3s;
-  background-color: $lightBlue;
-  border: none;
-  color: $white;
-  text-align: center;
-  border-radius: 5px 5px 5px 5px;
-  padding: 0.7rem 1rem;
-  &:hover{
-   background-color: $deepLightBlue;
-  }
-}
 .auth {
-  background: $white; 
+  background: $white;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items:center;
+  align-items: center;
   &__body {
     width: 400px;
     box-shadow: 0 30px 60px 0 rgb(0 0 0 / 30%);
@@ -37,23 +27,23 @@ body{
     overflow: hidden;
   }
   &__header {
-  text-align: center;
-  padding: 1rem;
-}
+    text-align: center;
+    padding: 1rem;
+  }
   &__item {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items:center
+    align-items: center;
   }
-  &__form{
-     width: 100%;
+  &__form {
+    width: 100%;
   }
-  &__form_item{
+  &__form_item {
     text-align: center;
     width: 100%;
   }
-  &__form_input{        
+  &__form_input {
     background-color: $lightGray;
     border: none;
     color: $black;
@@ -63,8 +53,8 @@ body{
     width: 80%;
     border: 2px solid $lightGray;
     border-radius: 5px 5px 5px 5px;
-    }
-  &__form_button{
+  }
+  &__form_button {
     padding: 15px 80px;
     text-decoration: none;
     text-transform: uppercase;
@@ -78,85 +68,151 @@ body{
     background-color: $lightGray;
     display: flex;
     justify-content: center;
-    align-items:center
+    align-items: center;
   }
-  &__footer_title{
+  &__footer_title {
     padding-right: 2rem;
+  }
+}
+.gallery {
+  height: 92vh;
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  overflow: auto;
+  &__item {
+    margin: 1rem;
+    display: inline-block;
+    width: 500px;
+    border: 1px solid $gray;
+    box-shadow: 0 30px 60px 0 rgb(0 0 0 / 30%);
+  }
+  &__item_image {
+    width: 100%;
+    background-color: #ffffff;
+    height: auto;
+  }
+}
+.paint {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  &__draw-area {
+    border: 1px solid $gray;
+    background-color: $white;
+    box-shadow: 0 30px 60px 0 rgb(0 0 0 / 30%);
+  }
+  &__instruments {
+    display: flex;
+    flex-direction: column;
+    background-color: $white;
+    border: 1px solid $gray;
+    z-index: 1;
+    padding: 1rem;
+    border-radius: 5px;
+  }
+  &__instruments_item {
+    margin: 3px;
+    padding: 3px;
+    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  &__instruments_brush {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  &__instruments_brush-item {
+    margin: 0.2rem;
+  }
+  &__instruments_brush-selection {
+    transition: all 0.3s ease-out;
+    display: inline-block;
+    min-width: 40px;
+    margin: 3px;
+    padding: 3px;
+    box-shadow: 0 0 5px 2px $gray;
+    border-radius: 3px;
+    text-align: center;
+  }
+  &__instruments_brush-options {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+  &__instruments_item_actions {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
   }
 }
 .taskBar {
   height: 8vh;
   display: flex;
-  justify-content:flex-end;
+  justify-content: flex-end;
   align-items: center;
   padding-right: 2rem;
-  &__item {
-    margin: 0.5rem
-  }
-  &__item_button {}
 }
-.gallery {
-height: 92vh;
-  flex-direction: row;
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  overflow: auto;
-    &__item {
-      margin: 1rem;
-      display: inline-block;
-      width: 500px;
-      border:1px solid $gray;
-      box-shadow: 0 30px 60px 0 rgb(0 0 0 / 30%);
-      }
-    &__item_image{
-      width: 100%;
-      background-color: #ffffff;
-      max-height: 100%;
-      min-width: 100%;
-      object-fit: cover;
-      vertical-align: bottom;
-    }
-  }
-.paint {
-  display:flex;
-  justify-content: center;
-  align-items:center;
-  &__draw-area{
-    border:1px solid $gray;
-    background-color: $white;
-    box-shadow: 0 30px 60px 0 rgb(0 0 0 / 30%);
-  }
-  &__instruments{
-    width:160px;
-    background-color: $white;
-    border:1px solid $gray;
-    z-index: 1;
-    padding: 1rem;
-
-  }
-  &__instruments_item{
-    margin:3px;
-    padding: 3px;
-    display: inline-block;
-  }
-  &__instruments_item_button{
-    display: inline-block;
-    min-width: 35px;
-    margin: 3px;
-    padding: 3px;
-  }
-  &__instruments_item_input{
-    width: 100%;
-  }
-}
-.save_button {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end
+.drawing {
+  touch-action: none;
 }
 .activeTool {
-  border: 3px solid $gray;
+  box-shadow: 0 0 3px 3px $deepLightBlue;
+  transform: scale(1.2);
 }
-
-@import "./reset.scss";
+.button {
+  transition: all 0.3s;
+  background-color: $lightBlue;
+  border: none;
+  color: $white;
+  text-align: center;
+  border-radius: 5px 5px 5px 5px;
+  padding: 0.7rem 1rem;
+  margin: 0.3rem;
+  &:hover {
+    background-color: $deepLightBlue;
+  }
+}
+.auth_button {
+  padding: 0.7rem 1rem !important;
+}
+.color_picker {
+  width: 100%;
+  border-radius: 5px;
+}
+@media (max-width: 1250px) {
+  .paint {
+    display: flex;
+    flex-direction: column;
+  }
+  .paint__instruments {
+    flex-direction: row;
+    padding: 0.5rem 0 0.5rem 0;
+  }
+  .paint__instruments_brush {
+    flex-direction: row;
+    margin-bottom: 0;
+  }
+  .taskBar {
+    padding-right: 1rem;
+  }
+}
+@media (max-width: 720px) {
+  .paint__instruments_item_actions {
+    flex-direction: column;
+  }
+  .button {
+    padding: 0.4rem 0.7rem;
+    min-width: 60px;
+  }
+  .taskBar {
+    padding-right: 0;
+  }
+}
+@import './reset.scss';

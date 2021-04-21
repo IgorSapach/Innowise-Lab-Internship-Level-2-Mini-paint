@@ -22,7 +22,7 @@
         <div class="auth__form_item">
           <button
             type="button"
-            class="auth__form_button button"
+            class="auth__form_button button auth_button"
             @click="signUp"
           >
             SignUp
@@ -30,7 +30,9 @@
         </div>
         <div class="auth__footer">
           <div class="auth__footer_title">Have an account already?</div>
-          <button type="button" class="button" @click="goToLogIn">LogIn</button>
+          <button type="button" class="button auth_button" @click="goToLogIn">
+            LogIn
+          </button>
         </div>
       </form>
     </div>

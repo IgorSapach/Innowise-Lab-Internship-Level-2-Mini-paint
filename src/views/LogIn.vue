@@ -20,14 +20,20 @@
           />
         </div>
         <div class="auth__form_item">
-          <button type="button" class="auth__form_button button" @click="logIn">
+          <button
+            type="button"
+            class="auth__form_button button auth_button"
+            @click="logIn"
+          >
             login
           </button>
         </div>
       </form>
       <div class="auth__footer">
         <div class="auth__footer_title">Need an account?</div>
-        <button type="button" class="button" @click="goToSignUp">SignUp</button>
+        <button type="button" class="button auth_button" @click="goToSignUp">
+          SignUp
+        </button>
       </div>
     </div>
   </div>
