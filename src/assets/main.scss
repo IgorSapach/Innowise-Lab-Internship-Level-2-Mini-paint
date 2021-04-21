@@ -1,4 +1,5 @@
 @import './variables.scss';
+@import './loader.scss';
 
 * {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -185,6 +186,9 @@ body {
 .color_picker {
   width: 100%;
   border-radius: 5px;
+}
+.dk__toast-mobile-container {
+  width: 100vw !important;
 }
 @media (max-width: 1250px) {
   .paint {

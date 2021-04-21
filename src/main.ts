@@ -5,15 +5,15 @@ import { useStore } from './store/store';
 import dotenv from 'dotenv';
 import firebase from 'firebase';
 
-import '@/assets/main.scss';
+import { ActionTypes } from './store/action-types';
 
+import DKToast from 'vue-dk-toast';
+import '@/assets/main.scss';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 library.add(fas, far);
-
-import { ActionTypes } from './store/action-types';
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_API_KEY,
@@ -29,6 +29,7 @@ firebase.initializeApp(firebaseConfig);
 
 createApp(App)
   .use(router)
+  .use(DKToast)
   .component('font-awesome-icon', FontAwesomeIcon)
   .mount('#app');
 dotenv.config();

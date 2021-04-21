@@ -23,9 +23,11 @@ import { ActionTypes } from '@/store/action-types';
 export default defineComponent({
   setup() {
     const store = useStore();
+
     const currentRoute = computed(() => {
       return router.currentRoute.value.name;
     });
+
     const goTo = function () {
       if (store.getters.userId && currentRoute.value === 'home') {
         router.push({
@@ -38,11 +40,13 @@ export default defineComponent({
         });
       }
     };
+
     const logOff = () => {
       store.dispatch(ActionTypes.LOG_OFF, null).then(() => {
         router.push({ name: 'logIn' });
       });
     };
+
     return { goTo, logOff, currentRoute };
   },
 });
