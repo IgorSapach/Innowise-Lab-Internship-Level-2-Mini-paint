@@ -16,7 +16,6 @@
           max="100"
           v-model="drawingProperties.drawLineWidth"
         />
-        <!-- {{ drawingProperties.drawLineWidth + 'px' }} -->
       </div>
     </div>
     <div class="paint__instruments_brush">
@@ -117,16 +116,21 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+
     const drawingProperties = reactive(store.state.drawingOptions);
+
     const setActiveTool = function (value: string) {
       store.commit(MutationTypes.SET_ACTIVE_TOOL, value);
     };
+
     const onSave = () => {
       EventBus.emit('save-image');
     };
+
     const onClear = () => {
       EventBus.emit('clear-draw-area');
     };
+
     const iconColor = computed(() => store.getters.drawingOptions.lineColor);
 
     return { drawingProperties, setActiveTool, onSave, onClear, iconColor };

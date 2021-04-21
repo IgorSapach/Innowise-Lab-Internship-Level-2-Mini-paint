@@ -21,12 +21,12 @@ export interface Actions {
       email: string;
       password: string;
     }
-  ): Promise<void>;
+  ): Promise<void | string>;
 
   [ActionTypes.LOG_IN](
     { commit }: AugmentedActionContext,
     userCredentials: { email: string; password: string }
-  ): Promise<void>;
+  ): Promise<void | string>;
 
   [ActionTypes.LOG_OFF](
     { commit }: AugmentedActionContext,
@@ -54,7 +54,7 @@ export const actions: ActionTree<State, State> & Actions = {
   },
 
   [ActionTypes.SIGN_UP]({ commit }, userCredentials) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       firebase
         .auth()
         .createUserWithEmailAndPassword(
@@ -64,14 +64,14 @@ export const actions: ActionTree<State, State> & Actions = {
         .then((resp: firebase.auth.UserCredential | null) => {
           if (resp && resp.user)
             commit(MutationTypes.SET_USER_ID, resp.user.uid);
+          resolve();
         })
-        .catch((err) => alert(err.message));
-      resolve();
+        .catch((err) => reject(err.message));
     });
   },
 
   [ActionTypes.LOG_IN]({ commit }, userCredentials) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       firebase
         .auth()
         .signInWithEmailAndPassword(
@@ -83,7 +83,7 @@ export const actions: ActionTree<State, State> & Actions = {
             commit(MutationTypes.SET_USER_ID, resp.user.uid);
           resolve();
         })
-        .catch((err) => alert(err.message));
+        .catch((err) => reject(err.message));
     });
   },
 

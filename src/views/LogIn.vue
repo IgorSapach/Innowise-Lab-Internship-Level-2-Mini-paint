@@ -2,7 +2,7 @@
   <div class="auth">
     <div class="auth__body">
       <div class="auth__header">LogIn</div>
-      <form @submit.prevent="logIn" class="auth__form">
+      <form @submit.prevent class="auth__form">
         <div class="auth__form_item">
           <input
             class="auth__form_input"
@@ -21,7 +21,7 @@
         </div>
         <div class="auth__form_item">
           <button
-            type="button"
+            type="submit"
             class="auth__form_button button auth_button"
             @click="logIn"
           >
@@ -44,6 +44,8 @@ import { defineComponent } from 'vue';
 import { useStore } from '@/store/store';
 import router from '@/router';
 import { ActionTypes } from '../store/action-types';
+import { inject } from 'vue';
+import type { Toast } from 'vue-dk-toast';
 
 export default defineComponent({
   setup() {
@@ -51,16 +53,29 @@ export default defineComponent({
       email: '',
       password: '',
     };
+    const toast = inject<Toast>('$toast');
 
     const store = useStore();
+
     const logIn = function () {
-      store.dispatch(ActionTypes.LOG_IN, form).then(() => {
-        router.push({ name: 'home' });
-      });
+      store
+        .dispatch(ActionTypes.LOG_IN, form)
+        .then(() => {
+          router.push({ name: 'home' });
+        })
+        .catch((err) => {
+          if (toast)
+            toast(err, {
+              positionY: 'top',
+              type: 'error',
+            });
+        });
     };
+
     const goToSignUp = function () {
       router.push({ name: 'signUp' });
     };
+
     return {
       logIn,
       form,
