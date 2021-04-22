@@ -5,10 +5,7 @@ import { State } from './state';
 export type Mutations<S = State> = {
   [MutationTypes.SET_COUNTER](state: S, payload: number): void;
   [MutationTypes.SET_USER_ID](state: S, payload: string): void;
-  [MutationTypes.SET_IMAGES](
-    state: S,
-    payload: { string: HTMLImageElement }
-  ): void;
+  [MutationTypes.SET_IMAGES](state: S, payload: { string: HTMLImageElement }): void;
   [MutationTypes.SET_ACTIVE_TOOL](state: S, payload: string): void;
 };
 

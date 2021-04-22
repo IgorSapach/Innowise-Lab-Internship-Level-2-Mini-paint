@@ -27,14 +27,8 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-createApp(App)
-  .use(router)
-  .use(DKToast)
-  .component('font-awesome-icon', FontAwesomeIcon)
-  .mount('#app');
+createApp(App).use(router).use(DKToast).component('font-awesome-icon', FontAwesomeIcon).mount('#app');
 dotenv.config();
 
 const store = useStore();
-store
-  .dispatch(ActionTypes.INIT, null)
-  .then(() => router.push({ name: 'home' }));
+store.dispatch(ActionTypes.INIT, null).then(() => router.push({ name: 'home' }));

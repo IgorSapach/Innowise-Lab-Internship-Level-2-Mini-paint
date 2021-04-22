@@ -1,7 +1,7 @@
 <template>
   <canvas
-    ref="canvas"
     id="drawing-pad"
+    ref="canvas"
     class="drawing"
     @mousedown="startPainting({ x: $event.clientX, y: $event.clientY })"
     @mousemove="draw({ x: $event.clientX, y: $event.clientY })"
@@ -34,12 +34,7 @@ import router from '@/router';
 
 import { ActionTypes } from '@/store/action-types';
 
-import {
-  getDrawingCoordinates,
-  pencil,
-  rect,
-  circle,
-} from '@/service/canvas-service';
+import { getDrawingCoordinates, pencil, rect, circle } from '@/service/canvas-service';
 
 export default defineComponent({
   setup() {
@@ -83,13 +78,7 @@ export default defineComponent({
       painting = true;
       cursorStartPos = getDrawingCoordinates(cursorPosition, bounds.value);
 
-      if (ctx)
-        tempImageData = ctx.getImageData(
-          0,
-          0,
-          canvasSize.value.width,
-          canvasSize.value.height
-        );
+      if (ctx) tempImageData = ctx.getImageData(0, 0, canvasSize.value.width, canvasSize.value.height);
       draw(cursorPosition);
     };
 
@@ -106,8 +95,7 @@ export default defineComponent({
         cursorPosition: getDrawingCoordinates(cursorPosition, bounds.value),
       };
 
-      if (drawingProperties.activeTool !== ToolNames.PENCIL)
-        ctx.putImageData(tempImageData, 0, 0);
+      if (drawingProperties.activeTool !== ToolNames.PENCIL) ctx.putImageData(tempImageData, 0, 0);
 
       switch (drawingProperties.activeTool) {
         case ToolNames.PENCIL: {
@@ -145,8 +133,7 @@ export default defineComponent({
       }
     };
     const onClear = () => {
-      if (ctx)
-        ctx.clearRect(0, 0, canvasSize.value.width, canvasSize.value.height);
+      if (ctx) ctx.clearRect(0, 0, canvasSize.value.width, canvasSize.value.height);
     };
 
     onMounted(() => {

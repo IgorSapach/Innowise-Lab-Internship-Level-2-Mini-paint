@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <transition name="fade">
-      <div class="loading" v-if="!haveImages"></div>
+      <div v-if="!haveImages" class="loading" />
       <div v-else class="gallery">
         <div v-for="item in images" :key="item" class="gallery__item">
           <img :src="item" class="gallery__item_image" />
@@ -23,18 +23,16 @@ export default defineComponent({
 
     const images = computed(() => {
       return store.getters.savedImages;
-    });
+    }
 
     const haveImages = computed(() => {
-      for (let key in store.getters.savedImages) {
+      for (let _key in store.getters.savedImages) {
         return true;
       }
       return false;
     });
 
-    onMounted(() =>
-      store.dispatch(ActionTypes.GET_IMAGES, store.getters.userId)
-    );
+    onMounted(() => store.dispatch(ActionTypes.GET_IMAGES, store.getters.userId));
 
     return { images, haveImages };
   },

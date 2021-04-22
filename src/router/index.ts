@@ -33,7 +33,7 @@ const router = createRouter({
 
 const store = useStore();
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   if (to.matched.some((route) => route.meta?.requiresAuth)) {
     if (store.getters.isAuth) {
       next();

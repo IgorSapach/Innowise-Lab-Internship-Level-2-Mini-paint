@@ -6,9 +6,7 @@
       </button>
     </div>
     <div class="taskBar__item">
-      <button class="taskBar__item_button button" @click="logOff">
-        LogOff
-      </button>
+      <button class="taskBar__item_button button" @click="logOff">LogOff</button>
     </div>
   </div>
 </template>

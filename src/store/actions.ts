@@ -6,10 +6,7 @@ import { MutationTypes } from './mutation-types';
 import firebase from 'firebase';
 
 type AugmentedActionContext = {
-  commit<K extends keyof Mutations>(
-    key: K,
-    payload: Parameters<Mutations[K]>[1]
-  ): ReturnType<Mutations[K]>;
+  commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>;
 } & Omit<ActionContext<State, State>, 'commit'>;
 
 export interface Actions {
@@ -20,23 +17,17 @@ export interface Actions {
     userCredentials: {
       email: string;
       password: string;
-    }
+    },
   ): Promise<void | string>;
 
   [ActionTypes.LOG_IN](
     { commit }: AugmentedActionContext,
-    userCredentials: { email: string; password: string }
+    userCredentials: { email: string; password: string },
   ): Promise<void | string>;
 
-  [ActionTypes.LOG_OFF](
-    { commit }: AugmentedActionContext,
-    undefined
-  ): Promise<void>;
+  [ActionTypes.LOG_OFF]({ commit }: AugmentedActionContext, undefined): Promise<void>;
 
-  [ActionTypes.GET_IMAGES](
-    { commit }: AugmentedActionContext,
-    userId: string
-  ): void;
+  [ActionTypes.GET_IMAGES]({ commit }: AugmentedActionContext, userId: string): void;
 
   [ActionTypes.ON_SAVE_IMAGE]({ getters }, image: string): Promise<void>;
 }
@@ -57,13 +48,9 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve, reject) => {
       firebase
         .auth()
-        .createUserWithEmailAndPassword(
-          userCredentials.email,
-          userCredentials.password
-        )
+        .createUserWithEmailAndPassword(userCredentials.email, userCredentials.password)
         .then((resp: firebase.auth.UserCredential | null) => {
-          if (resp && resp.user)
-            commit(MutationTypes.SET_USER_ID, resp.user.uid);
+          if (resp && resp.user) commit(MutationTypes.SET_USER_ID, resp.user.uid);
           resolve();
         })
         .catch((err) => reject(err.message));
@@ -74,13 +61,9 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve, reject) => {
       firebase
         .auth()
-        .signInWithEmailAndPassword(
-          userCredentials.email,
-          userCredentials.password
-        )
+        .signInWithEmailAndPassword(userCredentials.email, userCredentials.password)
         .then((resp) => {
-          if (resp && resp.user)
-            commit(MutationTypes.SET_USER_ID, resp.user.uid);
+          if (resp && resp.user) commit(MutationTypes.SET_USER_ID, resp.user.uid);
           resolve();
         })
         .catch((err) => reject(err.message));

@@ -6,7 +6,7 @@ export type Getters = {
   isAuth(state: State): boolean;
   savedImages(state: State): { image?: HTMLImageElement };
   drawingOptions(
-    state: State
+    state: State,
   ): {
     drawLineWidth: number;
     lineColor: string;

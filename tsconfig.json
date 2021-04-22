@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "noImplicitAny": false,
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ES5",
+    "module": "CommonJS",
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
@@ -12,29 +12,17 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": [
-      "webpack-env"
-    ],
+    "types": ["webpack-env"],
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
+    "lib": ["DOM", "ES2020", "esnext", "dom", "dom.iterable", "scripthost"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.js",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx",  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "outDir": "dist",
+  "esModuleInterop": true,
+  "sourceMap": true,
+  "declaration": true,
+  "skipLibCheck": true,
+  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.ts", "tests/**/*.tsx"],
+  "exclude": ["node_modules"]
 }

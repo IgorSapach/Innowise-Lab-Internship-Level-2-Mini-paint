@@ -2,38 +2,20 @@
   <div class="auth">
     <div class="auth__body">
       <div class="auth__header">SignUp</div>
-      <form @submit.prevent class="auth__form">
+      <form class="auth__form" @submit.prevent>
         <div class="auth__form_item">
-          <input
-            class="auth__form_input"
-            type="text"
-            placeholder="Email"
-            v-model="form.email"
-          />
+          <input v-model="form.email" class="auth__form_input" type="text" placeholder="Email" />
         </div>
         <div class="auth__form_item">
-          <input
-            class="auth__form_input"
-            type="password"
-            placeholder="Password"
-            v-model="form.password"
-          />
+          <input v-model="form.password" class="auth__form_input" type="password" placeholder="Password" />
         </div>
         <div class="auth__form_item">
-          <button
-            type="submit"
-            class="auth__form_button button auth_button"
-            @click="signUp"
-          >
-            SignUp
-          </button>
+          <button type="submit" class="auth__form_button button auth_button" @click="signUp">SignUp</button>
         </div>
       </form>
       <div class="auth__footer">
         <div class="auth__footer_title">Have an account already?</div>
-        <button type="button" class="button auth_button" @click="goToLogIn">
-          LogIn
-        </button>
+        <button type="button" class="button auth_button" @click="goToLogIn">LogIn</button>
       </div>
     </div>
   </div>

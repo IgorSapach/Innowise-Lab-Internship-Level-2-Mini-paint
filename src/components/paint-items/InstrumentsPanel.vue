@@ -2,92 +2,62 @@
   <div>
     <div class="paint__instruments_item">
       <div class="paint__instruments_brush-options">
-        <input
-          class="color_picker"
-          type="color"
-          id="color"
-          v-model="drawingProperties.lineColor"
-        />
+        <input id="color" v-model="drawingProperties.lineColor" class="color_picker" type="color" />
       </div>
       <div class="paint__instruments_brush-options">
-        <input
-          type="range"
-          min="1"
-          max="100"
-          v-model="drawingProperties.drawLineWidth"
-        />
+        <input v-model="drawingProperties.drawLineWidth" type="range" min="1" max="100" />
       </div>
     </div>
     <div class="paint__instruments_brush">
       <div class="paint__instruments_brush-item">
         <div
-          @click="setActiveTool(ToolNames.PENCIL)"
           class="paint__instruments_brush-selection"
           :class="{
             activeTool: drawingProperties.activeTool === ToolNames.PENCIL,
           }"
+          @click="setActiveTool(ToolNames.PENCIL)"
         >
-          <font-awesome-icon
-            :icon="['fas', 'pencil-alt']"
-            size="2x"
-            :color="iconColor"
-          />
+          <font-awesome-icon :icon="['fas', 'pencil-alt']" size="2x" :color="iconColor" />
         </div>
       </div>
       <div class="paint__instruments_brush-item">
         <div
-          @click="setActiveTool(ToolNames.FILL_RECT)"
           :class="{
             activeTool: drawingProperties.activeTool === ToolNames.FILL_RECT,
           }"
           class="paint__instruments_brush-selection"
+          @click="setActiveTool(ToolNames.FILL_RECT)"
         >
-          <font-awesome-icon
-            :icon="['fas', 'square']"
-            size="2x"
-            :color="iconColor"
-          />
+          <font-awesome-icon :icon="['fas', 'square']" size="2x" :color="iconColor" />
         </div>
         <div
-          @click="setActiveTool(ToolNames.RECT)"
           :class="{
             activeTool: drawingProperties.activeTool === ToolNames.RECT,
           }"
           class="paint__instruments_brush-selection"
+          @click="setActiveTool(ToolNames.RECT)"
         >
-          <font-awesome-icon
-            :icon="['far', 'square']"
-            size="2x"
-            :color="iconColor"
-          />
+          <font-awesome-icon :icon="['far', 'square']" size="2x" :color="iconColor" />
         </div>
       </div>
       <div class="paint__instruments_brush-item">
         <div
-          @click="setActiveTool(ToolNames.FILL_CIRCLE)"
           :class="{
             activeTool: drawingProperties.activeTool === ToolNames.FILL_CIRCLE,
           }"
           class="paint__instruments_brush-selection"
+          @click="setActiveTool(ToolNames.FILL_CIRCLE)"
         >
-          <font-awesome-icon
-            :icon="['fas', 'circle']"
-            size="2x"
-            :color="iconColor"
-          />
+          <font-awesome-icon :icon="['fas', 'circle']" size="2x" :color="iconColor" />
         </div>
         <div
-          @click="setActiveTool(ToolNames.CIRCLE)"
           :class="{
             activeTool: drawingProperties.activeTool === ToolNames.CIRCLE,
           }"
           class="paint__instruments_brush-selection"
+          @click="setActiveTool(ToolNames.CIRCLE)"
         >
-          <font-awesome-icon
-            :icon="['far', 'circle']"
-            size="2x"
-            :color="iconColor"
-          />
+          <font-awesome-icon :icon="['far', 'circle']" size="2x" :color="iconColor" />
         </div>
       </div>
     </div>
@@ -109,11 +79,6 @@ import { EventBus } from '@/EventBus.js';
 import { MutationTypes } from '@/store/mutation-types';
 
 export default defineComponent({
-  data() {
-    return {
-      ToolNames,
-    };
-  },
   setup() {
     const store = useStore();
 
@@ -134,6 +99,11 @@ export default defineComponent({
     const iconColor = computed(() => store.getters.drawingOptions.lineColor);
 
     return { drawingProperties, setActiveTool, onSave, onClear, iconColor };
+  },
+  data() {
+    return {
+      ToolNames,
+    };
   },
 });
 </script>
