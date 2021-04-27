@@ -3,23 +3,13 @@
     ref="canvas"
     id="drawing-pad"
     class="drawing"
-    @mousedown="startPainting({ x: $event.clientX, y: $event.clientY })"
-    @mousemove="draw({ x: $event.clientX, y: $event.clientY })"
-    @mouseup="finishedPainting"
-    @mouseleave="finishedPainting"
-    @touchstart="
-      startPainting({
-        x: $event.touches[0].clientX,
-        y: $event.touches[0].clientY,
-      })
-    "
-    @touchmove="
-      draw({
-        x: $event.touches[0].clientX,
-        y: $event.touches[0].clientY,
-      })
-    "
-    @touchend="finishedPainting"
+    @mousedown="mouseEventHandler"
+    @mousemove="mouseEventHandler"
+    @mouseup="mouseEventHandler"
+    @mouseleave="setStopDraw"
+    @touchstart="touchEventHandler"
+    @touchmove="touchEventHandler"
+    @touchend="setStopDraw"
   >
     This is an interactive drawind pad.
   </canvas>
@@ -79,7 +69,10 @@ export default defineComponent({
       };
     });
 
-    const startPainting = function (cursorPosition: { x: number; y: number }) {
+    const setStartPosition = function (cursorPosition: {
+      x: number;
+      y: number;
+    }) {
       painting = true;
       cursorStartPos = getDrawingCoordinates(cursorPosition, bounds.value);
 
@@ -133,7 +126,7 @@ export default defineComponent({
       }
     };
 
-    const finishedPainting = function () {
+    const setStopDraw = function () {
       painting = false;
       if (ctx) ctx.beginPath();
     };
@@ -148,8 +141,27 @@ export default defineComponent({
       if (ctx)
         ctx.clearRect(0, 0, canvasSize.value.width, canvasSize.value.height);
     };
+    const mouseEventHandler = (event) => {
+      if (event.type === 'mousedown')
+        setStartPosition({ x: event.clientX, y: event.clientY });
 
-    onMounted(() => {
+      if (event.type === 'mousemove')
+        draw({ x: event.clientX, y: event.clientY });
+
+      if (event.type === 'mouseup') setStopDraw();
+    };
+    const touchEventHandler = (event) => {
+      if (event.type === 'touchstart')
+        event.touches.forEach((touch) => {
+          setStartPosition({ x: touch.clientX, y: touch.clientY });
+        });
+
+      if (event.type === 'touchmove')
+        event.touches.forEach((touch) => {
+          draw({ x: touch.clientX, y: touch.clientY });
+        });
+    };
+    const setCanvasProperties = () => {
       if (canvas.value == null) return;
       ctx = canvas.value ? canvas.value.getContext('2d') : null;
       canvas.value.height = window.innerHeight / 1.4;
@@ -158,7 +170,10 @@ export default defineComponent({
       } else {
         if (canvas.value) canvas.value.width = window.innerWidth / 1.5;
       }
+    };
 
+    onMounted(() => {
+      setCanvasProperties();
       EventBus.on('save-image', () => {
         onSave();
       });
@@ -174,10 +189,10 @@ export default defineComponent({
       bounds,
       canvasSize,
       canvasValues,
-      startPainting,
-      draw,
-      finishedPainting,
+      setStopDraw,
       onSave,
+      mouseEventHandler,
+      touchEventHandler,
     };
   },
 });
