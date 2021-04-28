@@ -103,7 +103,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, reactive } from 'vue';
-import { useStore } from '@/store/store';
+import { useStore } from '@/store';
 import * as ToolNames from '@/const/draw-tool-names.js';
 import { EventBus } from '@/EventBus.js';
 import { MutationTypes } from '@/store/mutation-types';

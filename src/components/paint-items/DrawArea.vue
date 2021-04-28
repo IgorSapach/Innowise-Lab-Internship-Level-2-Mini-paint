@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { useStore } from '@/store/store';
+import { useStore } from '@/store';
 import * as ToolNames from '@/const/draw-tool-names.js';
 import { EventBus } from '@/EventBus.js';
 import router from '@/router';
