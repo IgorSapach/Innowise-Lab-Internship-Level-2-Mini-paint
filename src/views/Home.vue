@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <transition name="fade">
-      <div class="loading" v-if="!haveImages"></div>
+      <div class="loading" v-if="!showLoader"></div>
       <div v-else class="gallery">
         <div v-for="item in images" :key="item" class="gallery__item">
           <img :src="item" class="gallery__item_image" />
@@ -12,31 +12,28 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from 'vue';
-import { useStore } from '../store/store';
+import { computed, defineComponent, onMounted, ref } from 'vue';
+import { useStore } from '../store';
 
 import { ActionTypes } from '@/store/action-types';
 
 export default defineComponent({
   setup() {
     const store = useStore();
+    let showLoader = ref(false);
 
     const images = computed(() => {
-      return store.getters.savedImages;
+      if (store.getters.savedImages) return store.getters.savedImages;
+      return {};
     });
 
-    const haveImages = computed(() => {
-      for (let key in store.getters.savedImages) {
-        return true;
-      }
-      return false;
+    onMounted(() => {
+      store.dispatch(ActionTypes.GET_IMAGES, store.getters.userId).then(() => {
+        showLoader.value = true;
+      });
     });
 
-    onMounted(() =>
-      store.dispatch(ActionTypes.GET_IMAGES, store.getters.userId)
-    );
-
-    return { images, haveImages };
+    return { images, showLoader };
   },
 });
 </script>

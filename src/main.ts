@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-import { useStore } from './store/store';
+import { useStore } from './store';
 import dotenv from 'dotenv';
 import firebase from 'firebase';
 
@@ -36,5 +36,5 @@ dotenv.config();
 
 const store = useStore();
 store
-  .dispatch(ActionTypes.INIT, null)
+  .dispatch(ActionTypes.INIT, undefined)
   .then(() => router.push({ name: 'home' }));

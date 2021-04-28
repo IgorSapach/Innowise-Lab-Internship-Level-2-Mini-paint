@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
-import { useStore } from '@/store/store';
+import { useStore } from '@/store';
 import router from '@/router';
 
 import { ActionTypes } from '@/store/action-types';
@@ -42,7 +42,7 @@ export default defineComponent({
     };
 
     const logOff = () => {
-      store.dispatch(ActionTypes.LOG_OFF, null).then(() => {
+      store.dispatch(ActionTypes.LOG_OFF, undefined).then(() => {
         router.push({ name: 'logIn' });
       });
     };
