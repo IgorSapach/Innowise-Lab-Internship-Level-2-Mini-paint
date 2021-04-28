@@ -1,7 +1,14 @@
-import { GetterTree, MutationTree, ActionContext, CommitOptions } from 'vuex';
+import {
+  Module,
+  GetterTree,
+  MutationTree,
+  ActionContext,
+  CommitOptions,
+} from 'vuex';
 import { MutationTypes } from '../mutation-types';
 import { ActionTypes } from '../action-types';
 import firebase from 'firebase';
+import { RootState } from './../index';
 
 export const state: {
   userId: string;
@@ -12,12 +19,12 @@ export const state: {
 };
 
 export type Getters = {
-  userId(state: State): string;
-  isAuth(state: State): boolean;
-  savedImages(state: State): { string: HTMLImageElement } | null;
+  userId(state: UserState): string;
+  isAuth(state: UserState): boolean;
+  savedImages(state: UserState): { string: HTMLImageElement } | null;
 };
 
-export const getters: GetterTree<State, State> & Getters = {
+export const getters: GetterTree<UserState, RootState> & Getters = {
   userId: (state) => {
     return state.userId;
   },
@@ -34,7 +41,7 @@ export type MutationPayload = {
   [MutationTypes.SET_IMAGES]: { string: HTMLImageElement } | null;
 };
 
-export const mutations: MutationTree<State> & Mutations = {
+export const mutations: MutationTree<UserState> & Mutations = {
   [MutationTypes.SET_USER_ID](state, payload: string) {
     state.userId = payload;
   },
@@ -167,13 +174,21 @@ type AugmentedActionContext = {
     payload: MutationPayload[K],
     options?: CommitOptions
   ): void;
-} & Omit<ActionContext<State, State>, 'commit'>;
+} & Omit<ActionContext<UserState, RootState>, 'commit'>;
 
 type Mutations = {
   [Property in keyof MutationPayload]: (
-    state: State,
+    state: UserState,
     payload: MutationPayload[Property]
   ) => void;
 };
 
-type State = typeof state;
+type UserState = typeof state;
+
+export const user: Module<UserState, RootState> = {
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations,
+};
