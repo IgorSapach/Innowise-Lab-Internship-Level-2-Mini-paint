@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import { useStore } from '../store';
+import { store } from '../store';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -31,11 +31,9 @@ const router = createRouter({
   routes,
 });
 
-const store = useStore();
-
 router.beforeEach((to, from, next) => {
   if (to.matched.some((route) => route.meta?.requiresAuth)) {
-    if (store.getters.isAuth) {
+    if (store.getters['user/isAuth']) {
       next();
     } else {
       next({ name: 'logIn' });

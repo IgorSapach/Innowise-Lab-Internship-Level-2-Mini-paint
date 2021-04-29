@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-import { useStore } from './store';
+import { store, key } from './store';
 import dotenv from 'dotenv';
 import firebase from 'firebase';
 
@@ -9,11 +9,15 @@ import { ActionTypes } from './store/action-types';
 
 import DKToast from 'vue-dk-toast';
 import '@/assets/main.scss';
+
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 library.add(fas, far);
+
+dotenv.config();
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_API_KEY,
@@ -27,14 +31,13 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-createApp(App)
-  .use(router)
-  .use(DKToast)
-  .component('font-awesome-icon', FontAwesomeIcon)
-  .mount('#app');
-dotenv.config();
+store.dispatch(`user/${ActionTypes.INIT}`, undefined).then(() => {
+  createApp(App)
+    .use(store, key)
+    .use(router)
+    .use(DKToast)
+    .component('font-awesome-icon', FontAwesomeIcon)
+    .mount('#app');
 
-const store = useStore();
-store
-  .dispatch(ActionTypes.INIT, undefined)
-  .then(() => router.push({ name: 'home' }));
+  router.push({ name: 'home' });
+});

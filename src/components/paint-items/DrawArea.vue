@@ -43,7 +43,8 @@ export default defineComponent({
     let tempImageData: ImageData;
 
     const store = useStore();
-    const drawingProperties = store.state.drawingOptions;
+
+    const drawingProperties = store.getters['drawingOptions/drawingOptions'];
 
     const bounds = computed(() => {
       if (canvas.value !== null) {

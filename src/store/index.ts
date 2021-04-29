@@ -1,23 +1,21 @@
-import { createStore, Store as VuexStore } from 'vuex';
+import { InjectionKey } from 'vue';
+import { createStore, useStore as baseUseStore, Store } from 'vuex';
 
-import { user } from './modules/user';
-import * as moduleDrawingOptions from './modules/drawingOptions';
+import { userModule } from './modules/user';
+import { drawingOptionsModule } from './modules/drawingOptions';
 
-const initialState = { ...moduleDrawingOptions.state };
+const state = {};
+export type RootState = typeof state;
 
-export type RootState = typeof initialState;
+export const key: InjectionKey<Store<RootState>> = Symbol();
 
-export const store = createStore({
+export const store = createStore<RootState>({
   modules: {
-    user,
+    user: userModule,
+    drawingOptions: drawingOptionsModule,
   },
 });
 
-export type Store = Omit<
-  VuexStore<RootState>,
-  'getters' | 'commit' | 'dispatch'
->;
-
-export function useStore(): Store {
-  return store as Store;
+export function useStore() {
+  return baseUseStore(key);
 }

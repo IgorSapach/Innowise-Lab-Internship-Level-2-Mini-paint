@@ -1,13 +1,8 @@
-import { GetterTree, MutationTree } from 'vuex';
+import { GetterTree, MutationTree, Module } from 'vuex';
+
+import { RootState } from './../index';
 import { MutationTypes } from '../mutation-types';
 
-export const state: drawingOptionsType = {
-  drawingOptions: {
-    drawLineWidth: 1,
-    lineColor: '#000000',
-    activeTool: 'pencil',
-  },
-};
 export type drawingOptionsType = {
   drawingOptions: {
     drawLineWidth: number;
@@ -16,9 +11,19 @@ export type drawingOptionsType = {
   };
 };
 
+export const state: drawingOptionsType = {
+  drawingOptions: {
+    drawLineWidth: 1,
+    lineColor: '#000000',
+    activeTool: 'pencil',
+  },
+};
+
+type DrawingOptionsState = typeof state;
+
 export type Getters = {
   drawingOptions(
-    state: State
+    state: DrawingOptionsState
   ): {
     drawLineWidth: number;
     lineColor: string;
@@ -26,7 +31,7 @@ export type Getters = {
   };
 };
 
-export const getters: GetterTree<State, State> & Getters = {
+export const getters: GetterTree<DrawingOptionsState, RootState> & Getters = {
   drawingOptions: (state) => {
     return state.drawingOptions;
   },
@@ -36,7 +41,7 @@ export type MutationPayload = {
   [MutationTypes.SET_ACTIVE_TOOL]: string;
 };
 
-export const mutations: MutationTree<State> & Mutations = {
+export const mutations: MutationTree<DrawingOptionsState> & Mutations = {
   [MutationTypes.SET_ACTIVE_TOOL](state, payload: string) {
     state.drawingOptions.activeTool = payload;
   },
@@ -44,9 +49,14 @@ export const mutations: MutationTree<State> & Mutations = {
 
 type Mutations = {
   [Property in keyof MutationPayload]: (
-    state: State,
+    state: DrawingOptionsState,
     payload: MutationPayload[Property]
   ) => void;
 };
 
-type State = typeof state;
+export const drawingOptionsModule: Module<DrawingOptionsState, RootState> = {
+  namespaced: true,
+  state,
+  getters,
+  mutations,
+};

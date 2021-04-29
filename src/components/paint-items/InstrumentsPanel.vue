@@ -117,7 +117,9 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const drawingProperties = reactive(store.state.drawingOptions);
+    const drawingProperties = reactive(
+      store.getters['drawingOptions/drawingOptions']
+    );
 
     const setActiveTool = function (value: string) {
       store.commit(MutationTypes.SET_ACTIVE_TOOL, value);

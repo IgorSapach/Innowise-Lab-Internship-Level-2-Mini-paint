@@ -5,9 +5,10 @@ import {
   ActionContext,
   CommitOptions,
 } from 'vuex';
+import firebase from 'firebase';
+
 import { MutationTypes } from '../mutation-types';
 import { ActionTypes } from '../action-types';
-import firebase from 'firebase';
 import { RootState } from './../index';
 
 export const state: {
@@ -17,6 +18,8 @@ export const state: {
   userId: '',
   savedImages: null,
 };
+
+type UserState = typeof state;
 
 export type Getters = {
   userId(state: UserState): string;
@@ -183,9 +186,7 @@ type Mutations = {
   ) => void;
 };
 
-type UserState = typeof state;
-
-export const user: Module<UserState, RootState> = {
+export const userModule: Module<UserState, RootState> = {
   namespaced: true,
   state,
   getters,

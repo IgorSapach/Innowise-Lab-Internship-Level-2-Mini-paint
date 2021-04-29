@@ -28,9 +28,14 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      store.dispatch(ActionTypes.GET_IMAGES, store.getters.userId).then(() => {
-        showLoader.value = true;
-      });
+      store
+        .dispatch(
+          `user/${ActionTypes.GET_IMAGES}`,
+          store.getters['user/userId']
+        )
+        .then(() => {
+          showLoader.value = true;
+        });
     });
 
     return { images, showLoader };

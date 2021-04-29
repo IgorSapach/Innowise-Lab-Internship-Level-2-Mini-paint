@@ -18,8 +18,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+
     const isAuth = computed(() => {
-      return store.getters.isAuth;
+      return store.getters['user/isAuth'];
     });
 
     return { isAuth };
