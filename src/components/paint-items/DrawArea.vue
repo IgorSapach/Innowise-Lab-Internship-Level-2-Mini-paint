@@ -44,7 +44,15 @@ export default defineComponent({
 
     const store = useStore();
 
-    const drawingProperties = store.getters['drawingOptions/drawingOptions'];
+    const lineColor = computed(() => {
+      return store.getters['drawingOptions/lineColor'];
+    });
+    const lineWidth = computed(() => {
+      return store.getters['drawingOptions/lineWidth'];
+    });
+    const activeTool = computed(() => {
+      return store.getters['drawingOptions/activeTool'];
+    });
 
     const bounds = computed(() => {
       if (canvas.value !== null) {
@@ -91,19 +99,19 @@ export default defineComponent({
       if (!painting || ctx === null) return;
 
       ctx.lineCap = 'round';
-      ctx.fillStyle = drawingProperties.lineColor;
-      ctx.strokeStyle = drawingProperties.lineColor;
-      ctx.lineWidth = drawingProperties.drawLineWidth;
+      ctx.fillStyle = lineColor.value;
+      ctx.strokeStyle = lineColor.value;
+      ctx.lineWidth = lineWidth.value;
 
       const cursorValues = {
         cursorStartPos: cursorStartPos,
         cursorPosition: getDrawingCoordinates(cursorPosition, bounds.value),
       };
 
-      if (drawingProperties.activeTool !== ToolNames.PENCIL)
+      if (activeTool.value !== ToolNames.PENCIL)
         ctx.putImageData(tempImageData, 0, 0);
 
-      switch (drawingProperties.activeTool) {
+      switch (activeTool.value) {
         case ToolNames.PENCIL: {
           pencil(canvasValues.value, cursorValues);
           break;
@@ -184,7 +192,6 @@ export default defineComponent({
     });
 
     return {
-      drawingProperties,
       canvas,
       ctx,
       bounds,

@@ -29,12 +29,15 @@ export default defineComponent({
     });
 
     const goTo = function () {
-      if (store.getters.userId && currentRoute.value === 'home') {
+      if (store.getters['user/userId'] && currentRoute.value === 'home') {
         router.push({
           name: 'paint',
-          params: { uid: store.getters.userId },
+          params: { uid: store.getters['user/userId'] },
         });
-      } else if (store.getters.userId && currentRoute.value === 'paint') {
+      } else if (
+        store.getters['user/userId'] &&
+        currentRoute.value === 'paint'
+      ) {
         router.push({
           name: 'home',
         });
@@ -42,7 +45,7 @@ export default defineComponent({
     };
 
     const logOff = () => {
-      store.dispatch(ActionTypes.LOG_OFF, undefined).then(() => {
+      store.dispatch(`user/${ActionTypes.LOG_OFF}`).then(() => {
         router.push({ name: 'logIn' });
       });
     };

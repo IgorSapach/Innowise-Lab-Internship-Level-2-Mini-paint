@@ -59,7 +59,7 @@ export default defineComponent({
 
     const signUp = function () {
       store
-        .dispatch(ActionTypes.SIGN_UP, form)
+        .dispatch(`user/${ActionTypes.SIGN_UP}`, form)
         .then(() => {
           router.push({ name: 'home' });
         })

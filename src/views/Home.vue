@@ -23,7 +23,8 @@ export default defineComponent({
     let showLoader = ref(false);
 
     const images = computed(() => {
-      if (store.getters.savedImages) return store.getters.savedImages;
+      if (store.getters['user/savedImages'])
+        return store.getters['user/savedImages'];
       return {};
     });
 

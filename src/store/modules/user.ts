@@ -57,8 +57,6 @@ export const mutations: MutationTree<UserState> & Mutations = {
 };
 
 export type ActionsPayload = {
-  [ActionTypes.INIT]: [payload: undefined, returnVal: Promise<void>];
-
   [ActionTypes.SIGN_UP]: [
     payload: {
       email: string;
@@ -83,17 +81,6 @@ export type ActionsPayload = {
 };
 
 export const actions: Actions = {
-  [ActionTypes.INIT]({ commit }) {
-    return new Promise<void>((resolve) => {
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          commit(MutationTypes.SET_USER_ID, user.uid);
-        }
-        resolve();
-      });
-    });
-  },
-
   [ActionTypes.SIGN_UP]({ commit }, userCredentials) {
     return new Promise<void>((resolve, reject) => {
       firebase

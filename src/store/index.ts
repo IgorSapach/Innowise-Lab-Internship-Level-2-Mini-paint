@@ -1,8 +1,13 @@
 import { InjectionKey } from 'vue';
 import { createStore, useStore as baseUseStore, Store } from 'vuex';
 
+import { ActionTypes } from './action-types';
+import { MutationTypes } from './mutation-types';
 import { userModule } from './modules/user';
 import { drawingOptionsModule } from './modules/drawingOptions';
+
+import { firebaseConfig } from './firebaseParams';
+import firebase from 'firebase';
 
 export type RootState = {
   userId: string;
@@ -17,22 +22,26 @@ export type RootState = {
 export const key: InjectionKey<Store<RootState>> = Symbol();
 
 export const store = createStore<RootState>({
+  actions: {
+    [ActionTypes.INIT]({ commit }) {
+      firebase.initializeApp(firebaseConfig);
+      return new Promise<void>((resolve, reject) => {
+        firebase.auth().onAuthStateChanged((user) => {
+          if (user) {
+            commit(`user/${MutationTypes.SET_USER_ID}`, user.uid);
+            resolve();
+          }
+          reject(user);
+        });
+      });
+    },
+  },
   modules: {
     user: userModule,
     drawingOptions: drawingOptionsModule,
   },
 });
 
-export function useStore() {
+export function useStore(): Store<RootState> {
   return baseUseStore(key);
 }
-const firebaseConfig = {
-  apiKey: process.env.VUE_APP_API_KEY,
-  authDomain: process.env.VUE_APP_AUTH_DOMAIN,
-  databaseURL: process.env.VUE_APP_DATA_BASE_URL,
-  projectId: process.env.VUE_APP_PROJECT_ID,
-  storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
-  appId: process.env.VUE_APP_APP_ID,
-  measurementId: process.env.VUE_APP_MEASUREMENT_ID,
-};
