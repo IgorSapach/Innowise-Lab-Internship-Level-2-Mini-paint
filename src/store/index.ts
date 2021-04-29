@@ -24,14 +24,15 @@ export const key: InjectionKey<Store<RootState>> = Symbol();
 export const store = createStore<RootState>({
   actions: {
     [ActionTypes.INIT]({ commit }) {
-      firebase.initializeApp(firebaseConfig);
       return new Promise<void>((resolve, reject) => {
+        firebase.initializeApp(firebaseConfig);
         firebase.auth().onAuthStateChanged((user) => {
           if (user) {
             commit(`user/${MutationTypes.SET_USER_ID}`, user.uid);
             resolve();
           }
-          reject(user);
+          reject();
+          store.commit(`user/${MutationTypes.SET_SHOW_LOADER}`, false);
         });
       });
     },

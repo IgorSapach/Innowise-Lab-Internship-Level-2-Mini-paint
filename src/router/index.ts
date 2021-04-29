@@ -30,7 +30,6 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
-
 router.beforeEach((to, from, next) => {
   if (to.matched.some((route) => route.meta?.requiresAuth)) {
     if (store.getters['user/isAuth']) {

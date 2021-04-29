@@ -14,20 +14,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 library.add(fas, far);
 
-try {
-  store
-    .dispatch(ActionTypes.INIT)
-    .then(() => {
-      router.push({ name: 'home' });
-    })
-    .catch((err) => {
-      if (err == null) console.log('User is unauthorized');
-    });
-} finally {
+(async () => {
+  await store.dispatch(ActionTypes.INIT).catch(() => {
+    console.log('User is unauthorized');
+  });
   createApp(App)
     .use(store, key)
     .use(router)
     .use(DKToast)
     .component('font-awesome-icon', FontAwesomeIcon)
     .mount('#app');
-}
+})();

@@ -14,9 +14,11 @@ import { RootState } from './../index';
 export const state: {
   userId: string;
   savedImages: { string: HTMLImageElement } | null;
+  showLoader: boolean;
 } = {
   userId: '',
   savedImages: null,
+  showLoader: true,
 };
 
 type UserState = typeof state;
@@ -25,6 +27,7 @@ export type Getters = {
   userId(state: UserState): string;
   isAuth(state: UserState): boolean;
   savedImages(state: UserState): { string: HTMLImageElement } | null;
+  showLoader(state: UserState): boolean;
 };
 
 export const getters: GetterTree<UserState, RootState> & Getters = {
@@ -37,11 +40,15 @@ export const getters: GetterTree<UserState, RootState> & Getters = {
   savedImages: (state) => {
     return state.savedImages;
   },
+  showLoader: (state) => {
+    return state.showLoader;
+  },
 };
 
 export type MutationPayload = {
   [MutationTypes.SET_USER_ID]: string;
   [MutationTypes.SET_IMAGES]: { string: HTMLImageElement } | null;
+  [MutationTypes.SET_SHOW_LOADER]: boolean;
 };
 
 export const mutations: MutationTree<UserState> & Mutations = {
@@ -53,6 +60,9 @@ export const mutations: MutationTree<UserState> & Mutations = {
     payload: { string: HTMLImageElement } | null
   ) {
     state.savedImages = payload;
+  },
+  [MutationTypes.SET_SHOW_LOADER](state, payload: boolean) {
+    state.showLoader = payload;
   },
 };
 
@@ -128,6 +138,7 @@ export const actions: Actions = {
   },
 
   [ActionTypes.GET_IMAGES]({ commit }, userId) {
+    commit(MutationTypes.SET_SHOW_LOADER, true);
     return new Promise<void>((resolve) => {
       firebase
         .database()
@@ -135,6 +146,7 @@ export const actions: Actions = {
         .on('value', (dataSnapshot) => {
           commit(MutationTypes.SET_IMAGES, dataSnapshot.val());
           resolve();
+          commit(MutationTypes.SET_SHOW_LOADER, false);
         });
     });
   },

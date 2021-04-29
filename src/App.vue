@@ -1,7 +1,12 @@
 <template>
   <div class="body__item">
     <task-bar v-if="isAuth" />
-    <router-view />
+    <router-view v-slot="{ Component }">
+      <transition name="fade">
+        <div class="loading" v-if="showLoader"></div>
+        <component v-else :is="Component" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
@@ -19,11 +24,15 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
+    const showLoader = computed(() => {
+      return store.getters['user/showLoader'];
+    });
+
     const isAuth = computed(() => {
       return store.getters['user/isAuth'];
     });
 
-    return { isAuth };
+    return { isAuth, showLoader };
   },
 });
 </script>
