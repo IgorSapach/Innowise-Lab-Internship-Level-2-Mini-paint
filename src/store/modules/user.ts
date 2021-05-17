@@ -1,15 +1,16 @@
 import {
   Module,
-  GetterTree,
   MutationTree,
   ActionContext,
   CommitOptions,
+  GetterTree,
 } from 'vuex';
 import firebase from 'firebase';
 
 import { MutationTypes } from '../mutation-types';
 import { ActionTypes } from '../action-types';
 import { RootState } from './../index';
+import { EventBus } from '@/EventBus.js';
 
 export const state: {
   userId: string;
@@ -88,6 +89,13 @@ export type ActionsPayload = {
   [ActionTypes.GET_IMAGES]: [payload: string, returnVal: Promise<void>];
 
   [ActionTypes.ON_SAVE_IMAGE]: [payload: string, returnVal: Promise<void>];
+
+  [ActionTypes.GET_USER_INFO]: [payload: string, returnVal: Promise<void>];
+
+  [ActionTypes.SET_USER_INFO]: [
+    payload: Array<boolean>,
+    returnVal: Promise<void>
+  ];
 };
 
 export const actions: Actions = {
@@ -142,7 +150,7 @@ export const actions: Actions = {
     return new Promise<void>((resolve) => {
       firebase
         .database()
-        .ref(`${userId}/`)
+        .ref(`${userId}/images`)
         .on('value', (dataSnapshot) => {
           commit(MutationTypes.SET_IMAGES, dataSnapshot.val());
           resolve();
@@ -155,10 +163,33 @@ export const actions: Actions = {
     return new Promise<void>((resolve) => {
       firebase
         .database()
-        .ref(`${getters.userId}/`)
+        .ref(`${getters.userId}/images`)
         .push(image)
         .catch((err) => alert(err.message));
       resolve();
+    });
+  },
+
+  [ActionTypes.GET_USER_INFO]({ getters }) {
+    return new Promise<void>((resolve) => {
+      firebase
+        .database()
+        .ref(`${getters.userId}/userInfo`)
+        .on('value', (dataSnapshot) => {
+          return resolve(dataSnapshot.val());
+        });
+    });
+  },
+  [ActionTypes.SET_USER_INFO]({ getters }, payload) {
+    return new Promise<void>((resolve) => {
+      firebase
+        .database()
+        .ref(`${getters.userId}/userInfo`)
+        .set(payload)
+        .finally(() => {
+          EventBus.emit('get-user-info');
+          resolve();
+        });
     });
   },
 };

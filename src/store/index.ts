@@ -5,6 +5,7 @@ import { ActionTypes } from './action-types';
 import { MutationTypes } from './mutation-types';
 import { userModule } from './modules/user';
 import { drawingOptionsModule } from './modules/drawingOptions';
+import { userWalkThroughModule } from './modules/userWalkThrough';
 
 import { firebaseConfig } from './firebaseParams';
 import firebase from 'firebase';
@@ -39,6 +40,7 @@ export const store = createStore<RootState>({
   },
   modules: {
     user: userModule,
+    userWalkThrough: userWalkThroughModule,
     drawingOptions: drawingOptionsModule,
   },
 });

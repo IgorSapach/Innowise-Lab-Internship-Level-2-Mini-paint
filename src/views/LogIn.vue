@@ -46,7 +46,7 @@ import router from '@/router';
 import { ActionTypes } from '../store/action-types';
 import { inject } from 'vue';
 import type { Toast } from 'vue-dk-toast';
-
+import { EventBus } from '@/EventBus.js';
 export default defineComponent({
   setup() {
     const form = {
@@ -61,6 +61,7 @@ export default defineComponent({
       store
         .dispatch(`user/${ActionTypes.LOG_IN}`, form)
         .then(() => {
+          EventBus.emit('get-user-info');
           router.push({ name: 'home' });
         })
         .catch((err) => {

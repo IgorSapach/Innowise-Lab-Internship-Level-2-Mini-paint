@@ -5,4 +5,6 @@ export enum ActionTypes {
   LOG_OFF = 'LOG_OFF',
   GET_IMAGES = 'GET_IMAGES',
   ON_SAVE_IMAGE = 'ON_SAVE_IMAGE',
+  GET_USER_INFO = 'GET_USER_INFO',
+  SET_USER_INFO = 'SET_USER_INFO',
 }
