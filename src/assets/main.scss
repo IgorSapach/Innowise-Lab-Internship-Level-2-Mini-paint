@@ -1,3 +1,8 @@
+// @import '@material/dialog/mdc-dialog.import';
+
+// @include dialog.core-styles;
+// @import '@/mater';
+// @import '@material/dialog';
 @import './variables.scss';
 @import './loader.scss';
 
@@ -14,6 +19,9 @@ body {
   margin: 0;
   overflow: hidden;
 }
+// #app {
+//   height: 100vh;
+// }
 .auth {
   background: $white;
   height: 100vh;
@@ -101,6 +109,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: row;
+
   &__draw-area {
     border: 1px solid $gray;
     background-color: $white;
@@ -131,6 +140,7 @@ body {
   }
   &__instruments_brush-item {
     margin: 0.2rem;
+    transition: all 1s;
   }
   &__instruments_brush-selection {
     transition: all 0.3s ease-out;
@@ -141,11 +151,13 @@ body {
     box-shadow: 0 0 5px 2px $gray;
     border-radius: 3px;
     text-align: center;
+    background-color: $white;
   }
   &__instruments_brush-options {
     display: flex;
     flex-direction: row;
     width: 100%;
+    transition: all 1s;
   }
   &__instruments_item_actions {
     display: flex;
@@ -190,6 +202,17 @@ body {
 .dk__toast-mobile-container {
   width: 100vw !important;
 }
+.overlay_description {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: white;
+  text-shadow: 1px 1px 8px $white;
+}
+
 @media (max-width: 1250px) {
   .paint {
     display: flex;

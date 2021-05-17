@@ -16,10 +16,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { useStore } from '@/store';
 import * as ToolNames from '@/const/draw-tool-names.js';
-import { EventBus } from '@/EventBus.js';
+
 import router from '@/router';
 
 import { ActionTypes } from '@/store/action-types';
@@ -32,7 +32,33 @@ import {
 } from '@/service/canvas-service';
 
 export default defineComponent({
-  setup() {
+  props: {
+    saveTrigger: {
+      type: Boolean,
+    },
+    clearTrigger: { type: Boolean },
+  },
+  setup(props) {
+    watch(
+      () => props.saveTrigger,
+      () => {
+        if (canvas.value) {
+          store.dispatch(
+            `user/${ActionTypes.ON_SAVE_IMAGE}`,
+            canvas.value.toDataURL()
+          );
+          router.push({ name: 'home' });
+        }
+      }
+    );
+    watch(
+      () => props.clearTrigger,
+      () => {
+        if (ctx)
+          ctx.clearRect(0, 0, canvasSize.value.width, canvasSize.value.height);
+      }
+    );
+
     let painting = false;
     const canvas = ref<HTMLCanvasElement | null>(null);
     let ctx: CanvasRenderingContext2D | null = null;
@@ -140,16 +166,6 @@ export default defineComponent({
       if (ctx) ctx.beginPath();
     };
 
-    const onSave = () => {
-      if (canvas.value) {
-        store.dispatch(ActionTypes.ON_SAVE_IMAGE, canvas.value.toDataURL());
-        router.push({ name: 'home' });
-      }
-    };
-    const onClear = () => {
-      if (ctx)
-        ctx.clearRect(0, 0, canvasSize.value.width, canvasSize.value.height);
-    };
     const mouseEventHandler = (event) => {
       if (event.type === 'mousedown')
         setStartPosition({ x: event.clientX, y: event.clientY });
@@ -159,6 +175,7 @@ export default defineComponent({
 
       if (event.type === 'mouseup') setStopDraw();
     };
+
     const touchEventHandler = (event) => {
       if (event.type === 'touchstart')
         event.touches.forEach((touch) => {
@@ -170,6 +187,7 @@ export default defineComponent({
           draw({ x: touch.clientX, y: touch.clientY });
         });
     };
+
     const setCanvasProperties = () => {
       if (canvas.value == null) return;
       ctx = canvas.value ? canvas.value.getContext('2d') : null;
@@ -183,12 +201,6 @@ export default defineComponent({
 
     onMounted(() => {
       setCanvasProperties();
-      EventBus.on('save-image', () => {
-        onSave();
-      });
-      EventBus.on('clear-draw-area', () => {
-        onClear();
-      });
     });
 
     return {
@@ -198,7 +210,6 @@ export default defineComponent({
       canvasSize,
       canvasValues,
       setStopDraw,
-      onSave,
       mouseEventHandler,
       touchEventHandler,
     };
